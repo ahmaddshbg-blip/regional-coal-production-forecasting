@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Environments and secrets
+.env
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Raw, derived, and generated files
+data/raw/*
+data/interim/*
+data/processed/*
+artifacts/models/*
+artifacts/metrics/*
+reports/figures/*
+
+# Keep lightweight documentation inside ignored data directories
+!data/raw/README.md
+
+# OS and editor files
+.DS_Store
+Thumbs.db
