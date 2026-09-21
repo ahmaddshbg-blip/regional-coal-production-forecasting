@@ -179,3 +179,36 @@ Gate 4 must implement the configuration and checkpoint contracts in
 deterministic ordering, and failure on raw-snapshot mismatch. Holdout execution
 must require an explicit flag and a matching locked-candidate manifest. A model
 library cannot be added without a later documented model-class decision.
+
+## DEC-007: Parse the frozen MSHA text exports without quote semantics
+
+Date: 2026-09-21
+
+Status: Accepted during Gate 4 implementation
+
+Decision:
+
+Validate that every physical row has the expected number of pipe delimiters,
+then parse the frozen files with quote semantics disabled and remove surrounding
+quote characters from fields used by the transformation. Continue reading
+`MinesProdQuarterly.txt` directly as Latin-1. Losslessly transcode `Mines.txt`
+from Latin-1 byte mappings to temporary UTF-8 before DuckDB ingestion. Do not
+persist or publish the temporary copy.
+
+Reason:
+
+The official export contains unescaped internal quotes, so standards-compliant
+CSV quote parsing fails on valid source rows. All 2,761,471 quarterly rows have
+exactly 12 pipes and all 92,017 mine-master rows have exactly 58 pipes, so no
+field relies on quoted embedded delimiters. The mine master also contains C1
+bytes that DuckDB rejects under its built-in Latin-1 reader. A streaming UTF-8
+transcode preserves every original byte as the corresponding Latin-1 code
+point and avoids a network-installed DuckDB extension.
+
+Consequence:
+
+The original file sizes and SHA-256 hashes remain the identity contract. Any
+future source snapshot that changes row shape, header, size, or hash fails
+before transformation and requires a new dated decision rather than silently
+reusing this parser assumption. This decision refines DEC-006's expectation
+that both files could be read directly as Latin-1.

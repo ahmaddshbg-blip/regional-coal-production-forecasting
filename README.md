@@ -9,8 +9,9 @@ services provider.
 ## Project status
 
 The project has completed problem definition, data feasibility, chronological
-evaluation design, and engineering design. Gate 4 pipeline implementation is
-next.
+evaluation design, and engineering design. The Gate 4 pipeline is implemented
+and validated locally against the frozen raw snapshot; its first clean Google
+Colab reproduction remains pending.
 
 - The business problem and decision context are approved.
 - Gate 1 data feasibility is complete for the frozen 2026-09-20 snapshot.
@@ -19,6 +20,9 @@ next.
   holdout are fixed before model development.
 - Gate 3 selected DuckDB, Parquet checkpoints, a minimal Python package,
   machine-readable configuration, run manifests, and a risk-based test plan.
+- Gate 4 local validation reproduced all frozen source and transformation
+  counts, built 183,301 mine-quarter rows and 2,718 state-quarter rows, and
+  passed ten synthetic tests.
 - No candidate forecasting model has been selected or evaluated.
 - No performance or business-impact claim is made yet.
 
@@ -56,7 +60,8 @@ snapshot hashes, and the initial audit are documented in
 latest-quarter evidence are documented in
 [the data-quality policy](docs/data_quality_policy.md). Source generation,
 revision, and availability semantics are documented in
-[data provenance](docs/data_provenance.md).
+[data provenance](docs/data_provenance.md). Derived checkpoint fields and
+missingness semantics are defined in the [data dictionary](docs/data_dictionary.md).
 
 The 2.76 million raw rows include coal and metal/nonmetal records. The first
 domain filter reduces the relevant coal input to 344,473 rows without removing
@@ -73,6 +78,25 @@ Gate 3 selected DuckDB for the versioned SQL transformation and Parquet for
 rebuildable mine-quarter and state-quarter checkpoints. pandas is used only
 after the relational reduction reaches an appropriate analytical scale.
 
+## Reproduce Gate 4
+
+Place the two manually downloaded files under `data/raw/`, install the project,
+run the tests, and build the checkpoints:
+
+```text
+python -m pip install -e .
+python -m unittest discover -s tests -v
+python scripts/build_dataset.py
+```
+
+The command validates filenames, byte sizes, headers, row structure, SHA-256
+hashes, source counts, keys, numeric fields, mine-master coverage, and
+missing-value totals before writing either checkpoint. Existing checkpoints
+are not overwritten unless `--overwrite` is supplied deliberately. For the
+primary notebook workflow, open
+[`01_data_validation_and_panel.ipynb`](notebooks/01_data_validation_and_panel.ipynb)
+in Colab and set its single private Drive root.
+
 ## Analytical boundaries
 
 - This is a public-data demonstration of a realistic mining-planning problem.
@@ -87,9 +111,10 @@ after the relational reduction reaches an appropriate analytical scale.
 
 ## Next gate
 
-Gate 4 will implement and validate configuration, raw snapshot checks, DuckDB
-SQL transformations, versioned checkpoints, run metadata, tests, and the first
-Colab notebook. It will not select a forecasting model.
+Complete the clean Colab run of notebook 01 and record its exact dependency
+lock. Gate 5 can begin only after that reproduction passes. Gate 5 implements
+the frozen persistence and seasonal-naive baselines under the approved
+chronological design; candidate-model selection remains later.
 
 ## License and attribution
 

@@ -1,6 +1,6 @@
 # Architecture
 
-Status: Gate 3 engineering design frozen; implementation begins at Gate 4
+Status: Gate 4 implemented and locally validated; clean Colab run pending
 
 Last reviewed: 2026-09-21
 
@@ -149,6 +149,14 @@ DuckDB is the selected SQL engine. The pipeline will use an in-memory
 connection and versioned SQL files rather than a persistent database file. Raw
 CSV options and column types must be explicit; production runs may use the CSV
 sniffer only as a diagnostic, never as the executable schema contract.
+
+The frozen MSHA exports contain malformed internal quote characters. Every
+physical row nevertheless has the exact expected pipe-delimiter count, with no
+embedded pipes. Gate 4 therefore disables quote semantics, validates every
+row's delimiter count, and strips surrounding quotes only from fields used by
+the transformation. `Mines.txt` also contains C1 bytes that DuckDB rejects as
+Latin-1; Python performs a temporary, lossless Latin-1-code-point to UTF-8
+transcode before DuckDB reads it. Raw bytes and hashes remain unchanged.
 
 SQL files will be separated by responsibility:
 
@@ -340,7 +348,7 @@ Tests protect project-specific failure modes rather than package syntax.
 Data and SQL tests must cover:
 
 - missing or changed raw files, hashes, headers, and types;
-- Latin-1 pipe-delimited ingestion with quoted text;
+- fixed-width pipe-delimited ingestion with malformed quotes and C1 bytes;
 - coal filtering and complete mine-master joins;
 - duplicate mine-quarter-subunit keys and invalid quarter values;
 - negative production;

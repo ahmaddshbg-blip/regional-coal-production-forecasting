@@ -1,6 +1,6 @@
 # Google Colab Workflow
 
-Status: Gate 3 engineering design frozen; notebook implementation begins at Gate 4
+Status: notebook 01 implemented; first clean Colab reproduction pending
 
 ## Roles of Colab and Python files
 
@@ -89,9 +89,29 @@ and selected checkpoints, not for full-folder code synchronization. Every run
 must use one checked-out code revision rather than mixing local and Drive
 copies.
 
-Gate 4 will add the package metadata. Development runs will install the checked
-out package from `pyproject.toml`; the final reproducibility run will use the
-exact tested lock file. Notebook cells must not install unrecorded packages.
+Package metadata is defined in `pyproject.toml`. Development runs install the
+checked-out package from that file. After notebook 01 passes in a clean Colab
+runtime, its exact tested transitive versions will be recorded in
+`requirements-lock.txt`; until then, no lock file is claimed as Colab-tested.
+Notebook cells must not install unrecorded packages.
+
+## Notebook 01 execution
+
+Open `notebooks/01_data_validation_and_panel.ipynb` in Colab and run it from a
+fresh runtime. Edit only `DRIVE_PROJECT_ROOT` if the recommended Drive layout
+is not used. The notebook then:
+
+1. clones or fast-forwards the public repository;
+2. installs the checked-out package;
+3. records the exact Git revision;
+4. confirms both private raw files exist;
+5. executes the synthetic unit tests;
+6. calls the reusable validated pipeline; and
+7. displays the panel summary and a non-modeling production time series.
+
+Leave `OVERWRITE_EXISTING_CHECKPOINTS = False` on the first run. A later
+intentional rebuild may set it to `True` after confirming that the snapshot and
+configuration have not changed.
 
 ## Raw snapshot policy
 

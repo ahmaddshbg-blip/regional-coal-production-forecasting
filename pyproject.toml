@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "regional-coal-production-forecasting"
+version = "0.1.0"
+description = "Reproducible MSHA regional coal-production data pipeline"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = { file = "LICENSE" }
+authors = [{ name = "Ahmad" }]
+dependencies = [
+  "duckdb==1.5.5",
+  "matplotlib>=3.8,<4",
+  "numpy>=2.0,<3.0",
+  "pandas>=2.2,<3.1",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
