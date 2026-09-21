@@ -335,3 +335,51 @@ EDA creates no data-remediation blocker and does not authorize model or feature
 selection. Notebook 03 may implement the two frozen baselines, prediction-cell
 coverage checks, horizon-level metrics, and origin/state diagnostics using only
 development origins. Final holdout performance remains unopened.
+
+## DEC-011: Close the development baseline gate before candidate design
+
+Date: 2026-09-21
+
+Status: Accepted after clean Colab reproduction of notebook 03
+
+Decision:
+
+Accept baseline run `20260921T144811Z_62a3b84d_41560a` at code revision
+`62a3b84d8d7a7617ac8fc3798b053adb9ac97e7d` as the development benchmark.
+Keep the holdout closed. Before implementing a candidate model or creating
+notebook 04, freeze one complete candidate procedure: forecast strategy by
+horizon, information set available at each origin, feature construction,
+state-pooling rule, fitting and tuning boundary, deterministic settings, and
+uncertainty method. Actual-volume bands remain diagnostic outputs and cannot
+be used as prediction-time features because their labels depend on future
+actuals.
+
+Evidence:
+
+- The executed notebook completed without cell errors, ran the full test suite,
+  recorded a clean worktree, and wrote passed manifests and hashed artifacts.
+- The evaluator produced 11,144 forecast rows over 54 development origins and
+  horizons one through four with 100 percent prediction coverage. Scored cells
+  were 1,391, 1,390, 1,389, and 1,388 as frozen at Gate 2.
+- Persistence WAPE was 8.48, 11.04, 11.28, and 11.39 percent. Annual seasonal
+  persistence WAPE was 11.02, 11.13, 11.26, and 11.39 percent. The corresponding
+  median state MASE values also reproduced the frozen audit exactly.
+- Persistence is the reference comparator at horizon 1, remains marginally
+  better at horizon 2, seasonal persistence is marginally better at horizon 3,
+  and both formulas are identical at horizon 4. The near ties do not justify
+  choosing a candidate from a single aggregate comparison.
+- Mean signed error is positive for both methods and grows with horizon. Under
+  the frozen `forecast - actual` convention, this is systematic overforecasting
+  during a generally declining and disrupted development period.
+- Origin-level WAPE contains pronounced spikes, average state MASE varies
+  materially, and low-volume state-quarters have much larger relative error
+  than very-high-volume state-quarters. A candidate must therefore be assessed
+  across origins, states, and volume diagnostics rather than only pooled WAPE.
+
+Consequence:
+
+The baseline implementation and reproduction stage is complete, but no
+candidate has been selected. The next work product is a documented candidate
+design that responds to trend or regime change and cross-state heterogeneity
+without using unavailable future information. Promotion thresholds and the
+untouched holdout policy remain unchanged.

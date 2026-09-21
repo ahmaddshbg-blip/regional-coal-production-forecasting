@@ -1,7 +1,7 @@
 # Google Colab Workflow
 
-Status: notebooks 01 and 02 reproduced successfully in clean Colab; notebook
-03 is ready for baseline reproduction
+Status: notebooks 01, 02, and 03 reproduced successfully in clean Colab;
+candidate-procedure design is next
 
 ## Roles of Colab and Python files
 
@@ -153,6 +153,14 @@ silently overwriting prior evidence.
 Notebook 03 must reproduce 100 percent prediction coverage and the scored-cell,
 WAPE, and median-state MASE values frozen at Gate 2. It may compare the two
 fixed baselines, but it does not authorize a candidate model or holdout run.
+
+The accepted Colab execution used code revision
+`62a3b84d8d7a7617ac8fc3798b053adb9ac97e7d` and baseline run
+`20260921T144811Z_62a3b84d_41560a`. All tests passed, every frozen audit check
+passed, all 11,144 forecast rows were written, prediction coverage was 100
+percent, and the manifest records `holdout_opened = false`. These results close
+the baseline-reproduction gate only. Notebook 04 must not be created until the
+candidate procedure and its information-availability rules are frozen.
 
 ## Raw snapshot policy
 

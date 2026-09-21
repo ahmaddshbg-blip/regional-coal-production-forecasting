@@ -27,9 +27,10 @@ passed locally and in a clean Google Colab runtime against the frozen snapshot.
 - Gate 5 holdout-safe time-series EDA passed in a clean Colab runtime. The
   reviewed evidence supports retaining the validated panel without imputation,
   outlier removal, winsorization, or a preselected target transformation.
-- The two frozen baselines now have tested development-only evaluation code.
-  Local integration reproduces all Gate 2 scored-cell, WAPE, and median-state
-  MASE audit values; notebook 03 is ready for clean Colab reproduction.
+- Gate 5 baseline backtesting passed in a clean Colab runtime at code revision
+  `62a3b84d8d7a7617ac8fc3798b053adb9ac97e7d`. The versioned run reproduced
+  every frozen Gate 2 scored-cell, WAPE, and median-state MASE audit value with
+  100 percent prediction coverage and without opening the holdout.
 - No candidate forecasting model has been selected or evaluated.
 - No performance or business-impact claim is made yet.
 
@@ -135,10 +136,12 @@ versioned forecast and metric artifacts under the configured runs root.
 
 ## Next gate
 
-Gate 4 and the pre-baseline EDA are complete. Run
-[`03_baseline_backtesting.ipynb`](notebooks/03_baseline_backtesting.ipynb) in a
-clean Colab runtime and review its versioned artifacts and diagnostics.
-Candidate-model selection remains deferred until that reproduction is accepted.
+Data validation, holdout-safe EDA, and development baseline backtesting are
+complete. The next gate must freeze one complete candidate procedure,
+including its information set, feature availability, training rule, tuning
+boundary, and uncertainty method, before candidate code or notebook 04 is
+created. Model choice and holdout evaluation remain deferred until that design
+is justified and recorded.
 
 ## License and attribution
 

@@ -1,7 +1,7 @@
 # Architecture
 
-Status: Gate 4 and EDA complete; Gate 5 baseline implementation locally
-validated and ready for Colab reproduction
+Status: Gate 5 development baseline backtesting reproduced and accepted in
+clean Colab; candidate-procedure design is next
 
 Last reviewed: 2026-09-21
 
@@ -233,10 +233,11 @@ notebooks/
 `-- 05_error_uncertainty_decision_output.ipynb
 ```
 
-This is a creation sequence, not permission to add empty folders. Gate 4 will
-create only configuration, data validation, SQL transformation, pipeline, the
-first notebook, and their tests. Baseline modules and notebook 03 begin at Gate
-5. Candidate-model code and notebook 04 do not exist until a later gate.
+This is a creation sequence, not permission to add empty folders. Gate 4
+created configuration, data validation, SQL transformation, pipeline, the
+first notebook, and their tests. Gate 5 added the EDA and baseline stages.
+Candidate-model code and notebook 04 do not exist until one complete candidate
+procedure has been justified and frozen.
 
 The package stays flat because the project is not large enough to justify
 nested `data`, `features`, `models`, and `evaluation` subpackages. A new module
