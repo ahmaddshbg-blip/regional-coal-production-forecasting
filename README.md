@@ -8,12 +8,15 @@ services provider.
 
 ## Project status
 
-The project is in its definition and data-feasibility stage.
+The project has completed problem definition, data feasibility, and
+chronological evaluation design. Gate 3 engineering design is next.
 
 - The business problem and decision context are approved.
 - Gate 1 data feasibility is complete for the frozen 2026-09-20 snapshot.
-- The forecasting contract is a draft until the evaluation design is frozen.
-- No forecasting model has been selected or evaluated.
+- Gate 2 is complete and the forecasting contract is frozen as version 1.0.
+- Development validation, an evaluation embargo, and the final untouched
+  holdout are fixed before model development.
+- No candidate forecasting model has been selected or evaluated.
 - No performance or business-impact claim is made yet.
 
 ## Problem statement
@@ -37,7 +40,7 @@ in Google Colab using the documented [Colab workflow](docs/colab_workflow.md).
 
 ## Dataset
 
-The candidate source is the official
+The approved source is the official
 [MSHA Open Government Data portal](https://arlweb.msha.gov/OpenGovernmentData/OGIMSHA.asp).
 The local snapshot contains quarterly operator-reported employment and coal
 production from 2000Q1 through 2026Q2, joined by `MINE_ID` to the MSHA mine
@@ -77,9 +80,9 @@ quality diagnostics.
 
 ## Next gate
 
-Before feature engineering or modeling, the project must freeze its
-chronological evaluation design, including the modeling start date, origin
-schedule, eligibility rules, metrics, and final untouched holdout.
+Gate 3 will freeze the minimal engineering design: embedded SQL engine,
+dependency policy, repository code layout, configuration and path contract,
+checkpoint metadata, and test plan. It will not select a forecasting model.
 
 ## License and attribution
 

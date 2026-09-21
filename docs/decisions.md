@@ -98,5 +98,41 @@ Consequence:
 
 Notebooks must contain setup, orchestration, analysis narrative, and displayed
 evidence, but not the only implementation of core pipeline logic. Colab will
-obtain code through Git when the remote is established and read private raw data
-through a configurable Drive path.
+pull code from the public GitHub repository and read private raw data through a
+configurable Drive path.
+
+## DEC-005: Freeze chronological evaluation before engineering
+
+Date: 2026-09-21
+
+Status: Accepted; Gate 2 complete
+
+Decision:
+
+Use an expanding window beginning `2003Q1`. Development validation uses 54
+quarterly origins from `2007Q4` through `2021Q1`. Origins `2021Q2` through
+`2022Q1` form a four-quarter evaluation embargo, and the final untouched
+holdout uses 12 origins from `2022Q2` through `2025Q1`, with targets ending at
+`2026Q1`. Reserve `2026Q2` as the latest forward-forecast origin.
+
+Determine state eligibility at each origin using at least 20 observed quarters
+and four consecutive observed quarters ending at the origin. Compare every
+method on identical eligible cells against persistence and annual seasonal
+persistence. Use horizon-level WAPE as the primary volume metric and
+state-balanced seasonal MASE as the secondary metric. Freeze candidate
+promotion, uncertainty, and failure criteria in `forecasting_contract.md`.
+
+Reason:
+
+The 2003 start removes the broad early missing-data regime while retaining 54
+development origins. A 2013 start would leave only 14 such origins and is more
+appropriate as a post-selection sensitivity test. The embargo prevents the
+latest horizon-4 development targets from overlapping holdout targets. Dynamic
+eligibility avoids survivorship selection and preserves reported zeros.
+
+Consequence:
+
+Holdout performance must remain unseen until one complete candidate procedure
+is locked. Gate 3 may now design the implementation, but it cannot change the
+target, split, eligibility, baselines, metrics, or thresholds without a dated
+change-control decision.

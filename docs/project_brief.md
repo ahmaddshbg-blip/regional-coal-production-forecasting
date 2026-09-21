@@ -1,8 +1,8 @@
 # Project Brief
 
-Status: Approved for project initiation
+Status: Approved; Gate 2 evaluation contract frozen
 
-Last reviewed: 2026-09-20
+Last reviewed: 2026-09-21
 
 ## Context
 
@@ -79,9 +79,10 @@ The project will be considered analytically useful only if it:
 4. produces an interpretable regional planning output; and
 5. remains reproducible from documented raw inputs.
 
-Numeric acceptance thresholds will be set at the evaluation-design gate after
-baseline variability is measured. They will not be chosen after seeing final
-holdout results.
+Numeric acceptance thresholds were frozen at Gate 2 after measuring baseline
+variability on development origins only. They are recorded in
+[`forecasting_contract.md`](forecasting_contract.md) and cannot be changed
+after seeing final holdout results.
 
 ## Scope
 

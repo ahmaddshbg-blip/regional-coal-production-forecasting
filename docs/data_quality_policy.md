@@ -1,6 +1,6 @@
 # Data Quality Policy
 
-Status: Approved for Gate 1
+Status: Approved; Gate 2 window decisions incorporated
 
 Snapshot: 2026-09-20
 
@@ -50,15 +50,14 @@ missingness.
 
 ## Modeling-window recommendation
 
-The complete raw history remains preserved. Gate 2 should evaluate `2003Q1` as
-the primary modeling start because the widespread null regime ends after
-2002Q4. The 21 later all-null facility observations remain flagged and do not
-justify discarding all 2003-2012 history.
+The complete raw history remains preserved. Gate 2 selected `2003Q1` as the
+primary modeling start because the widespread null regime ends after `2002Q4`.
+The 21 later all-null facility observations remain flagged and do not justify
+discarding all 2003-2012 history.
 
-A sensitivity evaluation beginning `2013Q1`, after the final all-null
-mine-quarter, should test whether the longer window materially changes
-conclusions. The final start date must be frozen before candidate-model
-evaluation.
+A post-selection sensitivity evaluation beginning `2013Q1`, after the final
+all-null mine-quarter, will test whether the longer history materially changes
+conclusions. It cannot be used to retune a model after the holdout is opened.
 
 ## 2026Q2 completeness assessment
 
@@ -78,9 +77,8 @@ caveat:
   `2022Q2` through `2026Q1`.
 
 These checks find no material sign of a truncated download. They do not prove
-that MSHA will never revise the quarter. Gate 2 must decide whether `2026Q2`
-belongs in the final untouched holdout or is reserved as the latest forecast
-origin.
+that MSHA will never revise the quarter. Gate 2 reserved `2026Q2` as the latest
+forecast origin. The final scored holdout ends at target quarter `2026Q1`.
 
 ## Validation requirements
 

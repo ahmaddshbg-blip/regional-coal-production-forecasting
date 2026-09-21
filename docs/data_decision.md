@@ -85,8 +85,9 @@ For each state and calendar quarter:
 5. retain mine counts and reporting coverage as quality indicators.
 
 The approved null and zero rules are recorded in
-[`data_quality_policy.md`](data_quality_policy.md). The modeling start date
-remains a Gate 2 evaluation-design decision.
+[`data_quality_policy.md`](data_quality_policy.md). Gate 2 selected `2003Q1` as
+the primary modeling start and reserved `2013Q1` as a post-selection
+sensitivity window.
 
 ## Computational scope
 
@@ -132,5 +133,5 @@ distinctiveness.
 
 Gate 1 passed on 2026-09-20. Source reuse terms, latest-quarter completeness,
 revision behavior, and missing-value treatment are documented in the focused
-provenance, attribution, and data-quality files. Gate 2 must now freeze the
-chronological evaluation design before feature engineering or modeling.
+provenance, attribution, and data-quality files. Gate 2 passed on 2026-09-21;
+the frozen chronological design is recorded in `forecasting_contract.md`.

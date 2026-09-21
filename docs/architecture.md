@@ -1,8 +1,8 @@
 # Architecture
 
-Status: Design-level architecture; implementation begins after Gate 2
+Status: Gate 2 complete; implementation decisions begin at Gate 3
 
-Last reviewed: 2026-09-20
+Last reviewed: 2026-09-21
 
 ## Design goals
 
@@ -157,9 +157,10 @@ making hidden notebook state the only way to reproduce the analysis.
 | Expensive run checkpoints | Private Drive, versioned by run | Reuse only after metadata validation |
 | Final lightweight metrics and figures | Git repository | Update with the code and configuration that produced them |
 
-The current local repository is the active development workspace. A private
-Git remote should become the code synchronization mechanism once established;
-periodic full-folder copying to Drive is only a temporary fallback.
+The current local repository is the active development workspace. The public
+GitHub repository is the code synchronization mechanism. Raw data and selected
+large checkpoints remain private and outside Git; periodic full-folder copying
+to Drive is not part of the normal workflow.
 
 ## Path contract
 

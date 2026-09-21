@@ -1,6 +1,6 @@
 # Google Colab Workflow
 
-Status: Approved execution design; notebook implementation begins after Gate 2
+Status: Approved execution design; notebook implementation begins at Gate 3
 
 ## Roles of Colab and Python files
 
@@ -83,10 +83,11 @@ The repository code will then resolve input files beneath
 `PROJECT_DATA_ROOT/raw/`. No reusable source file will contain the author's
 personal Drive path.
 
-Once a private Git remote is established, Colab should clone or pull the
-repository and install its recorded dependencies. Until then, full-folder Drive
-synchronization may be used temporarily, but every run must use one deliberate
-project copy rather than mixing code from local and Drive locations.
+The public GitHub repository is established. Colab should clone or pull that
+repository and install its recorded dependencies. Drive is used for raw data
+and selected checkpoints, not for full-folder code synchronization. Every run
+must use one checked-out code revision rather than mixing local and Drive
+copies.
 
 ## Raw snapshot policy
 
