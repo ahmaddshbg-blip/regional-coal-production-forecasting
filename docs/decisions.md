@@ -244,3 +244,44 @@ Consequence:
 Gate 5 may implement only the already frozen persistence and seasonal-naive
 baselines plus their chronological evaluation tests. This decision does not
 authorize a candidate model, holdout evaluation, or performance claim.
+
+## DEC-009: Guard exploratory target values at the development boundary
+
+Date: 2026-09-21
+
+Status: Accepted before time-series EDA
+
+Decision:
+
+Limit every exploratory use of production magnitude to `2003Q1` through
+`2022Q1`, the latest target used by the frozen development origins. Permit
+structural coverage and eligibility checks through `2026Q2` only when later
+production magnitudes are masked before entering pandas. Treat reported zero
+as observed, preserve null and absent-row distinctions, and flag unusual
+changes without removing, winsorizing, or imputing them. Trace flags to the
+mine-quarter checkpoint only within the development target window.
+
+Disclosure:
+
+The Gate 4 notebook initially rendered one national aggregate production
+series through `2026Q2` before model or candidate work began. This exposed the
+aggregate path of later target values, so the project will not claim that no
+post-development magnitude was ever viewed. No state-level holdout values,
+baseline or candidate holdout errors, or holdout performance were inspected,
+and no evaluation choice was changed in response. Notebook 01 is truncated at
+`2022Q1`, and Notebook 02 prevents later magnitudes from entering its Python
+analysis frame.
+
+Reason:
+
+EDA is necessary before baseline implementation, but inspecting later target
+magnitudes could influence transformations, anomaly treatment, feature design,
+or model choice. The explicit boundary preserves the intended development-only
+workflow while recording the limited aggregate exposure honestly.
+
+Consequence:
+
+The final holdout-performance gate remains closed. Public claims must
+distinguish an unopened holdout evaluation from the stronger and no longer
+accurate claim that every aggregate post-development target value remained
+unseen.

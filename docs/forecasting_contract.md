@@ -145,9 +145,11 @@ the gap may still become training history at a later holdout origin.
 - Access rule: do not calculate candidate holdout performance until one method,
   feature set, hyperparameter policy, and interval procedure are locked from
   development validation.
-- Only timestamp availability and origin-time eligibility were inspected while
-  defining the split. No holdout target magnitudes, baseline errors, or
-  candidate errors were used.
+- The split was defined from timestamp availability and origin-time
+  eligibility, without using state-level holdout target magnitudes, baseline
+  errors, or candidate errors. A later Gate 4 notebook exposed one national
+  aggregate series through `2026Q2`; this limited exposure is disclosed in
+  DEC-009 and did not change the frozen design.
 - After opening the holdout, no model or threshold may be changed because of a
   holdout result. Any later change creates a new experiment and a newly dated
   holdout policy.

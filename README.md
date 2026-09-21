@@ -24,6 +24,9 @@ passed locally and in a clean Google Colab runtime against the frozen snapshot.
   and produced identical Parquet hashes on Windows and Colab.
 - The exact Colab runtime dependency closure is frozen in
   `requirements-lock.txt`.
+- Gate 5 begins with holdout-safe time-series EDA. Notebook 02 and its tested
+  helpers are ready for clean Colab execution; baseline implementation remains
+  deferred until that evidence is reviewed.
 - No candidate forecasting model has been selected or evaluated.
 - No performance or business-impact claim is made yet.
 
@@ -119,9 +122,12 @@ in Colab and set its single private Drive root.
 
 ## Next gate
 
-Gate 4 is complete. Gate 5 will implement the frozen persistence and
-seasonal-naive baselines under the approved chronological design. Candidate
-model selection remains deferred until baseline evidence exists.
+Gate 4 is complete. Run
+[`02_time_series_eda.ipynb`](notebooks/02_time_series_eda.ipynb) in a clean
+Colab runtime and review its coverage, scale, seasonality, anomaly, and dynamic
+eligibility evidence. Gate 5 will implement the frozen persistence and
+seasonal-naive baselines only after that review. Candidate model selection
+remains deferred until baseline evidence exists.
 
 ## License and attribution
 

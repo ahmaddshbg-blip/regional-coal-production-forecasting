@@ -1,6 +1,7 @@
 # Google Colab Workflow
 
-Status: notebook 01 reproduced successfully in clean Colab; Gate 4 complete
+Status: notebook 01 reproduced successfully in clean Colab; notebook 02 ready
+for Gate 5 EDA execution
 
 ## Roles of Colab and Python files
 
@@ -119,6 +120,21 @@ rerun will reuse existing checkpoints only after the current raw files,
 configuration hash, matching passed manifest, output sizes, and output hashes
 are validated. Set the flag to `True` only for an intentional rebuild after
 confirming that the snapshot and configuration have not changed.
+
+## Notebook 02 execution
+
+Open `notebooks/02_time_series_eda.ipynb` in a fresh Colab runtime after
+notebook 01 has produced a passed run manifest and both checkpoints. The
+notebook validates that lineage before loading data. Production magnitudes are
+available to EDA only from `2003Q1` through `2022Q1`; later quarters retain
+row-presence and non-null availability signals but are masked in the DuckDB
+query before entering pandas.
+
+Notebook 02 examines structural coverage, state scale and zeros, aggregate and
+state trajectories, seasonality, concentration, calendar-aligned changes,
+mine-level contributors to flagged changes, and dynamic eligibility. It does
+not impute or remove observations, select transformations, implement a
+baseline, choose a model, or calculate holdout performance.
 
 ## Raw snapshot policy
 
