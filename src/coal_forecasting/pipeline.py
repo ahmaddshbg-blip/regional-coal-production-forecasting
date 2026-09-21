@@ -393,7 +393,8 @@ def load_latest_validated_manifest(
         except (OSError, json.JSONDecodeError):
             continue
         if (
-            candidate.get("status") == "passed"
+            candidate.get("stage") == "validated_data_pipeline"
+            and candidate.get("status") == "passed"
             and candidate.get("checkpoint_id") == config["snapshot"]["checkpoint_id"]
             and candidate.get("config_sha256") == expected_config_hash
         ):

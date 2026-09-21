@@ -1,6 +1,7 @@
 # Architecture
 
-Status: Gate 4 complete; locally and Colab validated
+Status: Gate 4 and EDA complete; Gate 5 baseline implementation locally
+validated and ready for Colab reproduction
 
 Last reviewed: 2026-09-21
 

@@ -1,7 +1,7 @@
 # Google Colab Workflow
 
-Status: notebooks 01 and 02 reproduced successfully in clean Colab; baseline
-notebook is next
+Status: notebooks 01 and 02 reproduced successfully in clean Colab; notebook
+03 is ready for baseline reproduction
 
 ## Roles of Colab and Python files
 
@@ -135,6 +135,24 @@ state trajectories, seasonality, concentration, calendar-aligned changes,
 mine-level contributors to flagged changes, and dynamic eligibility. It does
 not impute or remove observations, select transformations, implement a
 baseline, choose a model, or calculate holdout performance.
+
+## Notebook 03 execution
+
+Open `notebooks/03_baseline_backtesting.ipynb` in a fresh Colab runtime after
+the reviewed notebook 02 run. The notebook validates the passed data manifest,
+loads target values only through `2022Q1`, executes the complete test suite,
+and calls the reusable development-only evaluator.
+
+Each execution writes a new versioned run directory containing baseline
+forecasts plus overall, state, origin, and actual-volume-band metrics. Its
+manifest records code, runtime, configuration, source-checkpoint lineage,
+artifact hashes, frozen-audit status, and that holdout performance was not
+opened. Re-running the notebook creates another auditable run rather than
+silently overwriting prior evidence.
+
+Notebook 03 must reproduce 100 percent prediction coverage and the scored-cell,
+WAPE, and median-state MASE values frozen at Gate 2. It may compare the two
+fixed baselines, but it does not authorize a candidate model or holdout run.
 
 ## Raw snapshot policy
 

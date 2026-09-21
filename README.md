@@ -27,6 +27,9 @@ passed locally and in a clean Google Colab runtime against the frozen snapshot.
 - Gate 5 holdout-safe time-series EDA passed in a clean Colab runtime. The
   reviewed evidence supports retaining the validated panel without imputation,
   outlier removal, winsorization, or a preselected target transformation.
+- The two frozen baselines now have tested development-only evaluation code.
+  Local integration reproduces all Gate 2 scored-cell, WAPE, and median-state
+  MASE audit values; notebook 03 is ready for clean Colab reproduction.
 - No candidate forecasting model has been selected or evaluated.
 - No performance or business-impact claim is made yet.
 
@@ -108,6 +111,16 @@ primary notebook workflow, open
 [`01_data_validation_and_panel.ipynb`](notebooks/01_data_validation_and_panel.ipynb)
 in Colab and set its single private Drive root.
 
+Development-only baseline evaluation can also be run from the command line:
+
+```text
+python scripts/evaluate_baselines.py
+```
+
+The command validates checkpoint lineage, evaluates only the frozen 54
+development origins, verifies the pre-implementation audit table, and writes
+versioned forecast and metric artifacts under the configured runs root.
+
 ## Analytical boundaries
 
 - This is a public-data demonstration of a realistic mining-planning problem.
@@ -122,10 +135,10 @@ in Colab and set its single private Drive root.
 
 ## Next gate
 
-Gate 4 and the pre-baseline EDA are complete. Gate 5 will next implement and
-reproduce the frozen persistence and seasonal-naive baselines under the
-approved chronological design. Candidate model selection remains deferred
-until baseline evidence exists.
+Gate 4 and the pre-baseline EDA are complete. Run
+[`03_baseline_backtesting.ipynb`](notebooks/03_baseline_backtesting.ipynb) in a
+clean Colab runtime and review its versioned artifacts and diagnostics.
+Candidate-model selection remains deferred until that reproduction is accepted.
 
 ## License and attribution
 
