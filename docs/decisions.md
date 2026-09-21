@@ -54,7 +54,7 @@ or forecast validity rather than computational appearance.
 
 Date: 2026-09-20
 
-Status: Accepted in principle; engine selection deferred to Gate 3
+Status: Accepted; DuckDB selected at Gate 3
 
 Decision:
 
@@ -71,9 +71,10 @@ not justified.
 
 Consequence:
 
-The SQL query will be versioned and tested. The engine will be selected only
-after compatibility, null behavior, dependency cost, and reproducible execution
-are assessed at the engineering-design gate.
+DuckDB will execute versioned SQL against explicit Latin-1 pipe-delimited raw
+schemas and write validated Parquet checkpoints. The transformation and null
+semantics will be protected by synthetic SQL tests and an optional frozen-
+snapshot integration test.
 
 ## DEC-004: Colab notebooks are the main analytical interface
 
@@ -136,3 +137,45 @@ Holdout performance must remain unseen until one complete candidate procedure
 is locked. Gate 3 may now design the implementation, but it cannot change the
 target, split, eligibility, baselines, metrics, or thresholds without a dated
 change-control decision.
+
+## DEC-006: Freeze the minimal engineering architecture
+
+Date: 2026-09-21
+
+Status: Accepted; Gate 3 complete
+
+Decision:
+
+Use DuckDB 1.5.5 as the embedded SQL engine, explicit raw schemas, and
+Zstandard-compressed Parquet checkpoints. Use a flat `src/coal_forecasting`
+package, JSON configuration, `PROJECT_DATA_ROOT` and `PROJECT_RUNS_ROOT` path
+overrides, standard-library unit tests, and JSON run manifests. Use
+`pyproject.toml` for supported direct dependencies and create an exact lock
+file only after the first clean Colab implementation passes.
+
+Create files by analytical stage rather than generating the full final tree at
+once. Gate 4 creates data and validation code only. Baseline, model, and
+uncertainty modules are added when their gates begin.
+
+Reason:
+
+DuckDB reads the source delimiter and Latin-1 encoding directly, expresses the
+relational reduction in reviewable SQL, and writes Parquet without a database
+server. SQLite would require an unnecessary import stage. A pandas-only raw
+transformation would weaken the SQL evidence and use more memory. Adding
+Polars, Spark, Docker, orchestration, or experiment-tracking infrastructure
+would duplicate capabilities or exceed the project's scale.
+
+The flat package is sufficient for a single forecasting workflow and avoids
+empty subpackages. JSON follows the established Project 01 pattern without an
+extra parser dependency. Synthetic fixtures keep CI independent of the 301 MB
+raw snapshot, while local integration checks preserve confidence in the frozen
+data contract.
+
+Consequence:
+
+Gate 4 must implement the configuration and checkpoint contracts in
+`architecture.md`, including atomic writes, hashes, schema fingerprints,
+deterministic ordering, and failure on raw-snapshot mismatch. Holdout execution
+must require an explicit flag and a matching locked-candidate manifest. A model
+library cannot be added without a later documented model-class decision.

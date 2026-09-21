@@ -8,14 +8,17 @@ services provider.
 
 ## Project status
 
-The project has completed problem definition, data feasibility, and
-chronological evaluation design. Gate 3 engineering design is next.
+The project has completed problem definition, data feasibility, chronological
+evaluation design, and engineering design. Gate 4 pipeline implementation is
+next.
 
 - The business problem and decision context are approved.
 - Gate 1 data feasibility is complete for the frozen 2026-09-20 snapshot.
 - Gate 2 is complete and the forecasting contract is frozen as version 1.0.
 - Development validation, an evaluation embargo, and the final untouched
   holdout are fixed before model development.
+- Gate 3 selected DuckDB, Parquet checkpoints, a minimal Python package,
+  machine-readable configuration, run manifests, and a risk-based test plan.
 - No candidate forecasting model has been selected or evaluated.
 - No performance or business-impact claim is made yet.
 
@@ -66,6 +69,10 @@ preserved in full, the transformation scans all relevant coal history, and the
 mine-quarter checkpoint remains available for regional composition and data
 quality diagnostics.
 
+Gate 3 selected DuckDB for the versioned SQL transformation and Parquet for
+rebuildable mine-quarter and state-quarter checkpoints. pandas is used only
+after the relational reduction reaches an appropriate analytical scale.
+
 ## Analytical boundaries
 
 - This is a public-data demonstration of a realistic mining-planning problem.
@@ -80,9 +87,9 @@ quality diagnostics.
 
 ## Next gate
 
-Gate 3 will freeze the minimal engineering design: embedded SQL engine,
-dependency policy, repository code layout, configuration and path contract,
-checkpoint metadata, and test plan. It will not select a forecasting model.
+Gate 4 will implement and validate configuration, raw snapshot checks, DuckDB
+SQL transformations, versioned checkpoints, run metadata, tests, and the first
+Colab notebook. It will not select a forecasting model.
 
 ## License and attribution
 

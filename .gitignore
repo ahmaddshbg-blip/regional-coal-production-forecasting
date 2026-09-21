@@ -19,8 +19,7 @@ data/raw/*
 data/interim/*
 data/processed/*
 artifacts/models/*
-artifacts/metrics/*
-reports/figures/*
+runs/*
 
 # Keep lightweight documentation inside ignored data directories
 !data/raw/README.md

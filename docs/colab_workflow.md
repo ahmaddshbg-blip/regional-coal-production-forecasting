@@ -1,6 +1,6 @@
 # Google Colab Workflow
 
-Status: Approved execution design; notebook implementation begins at Gate 3
+Status: Gate 3 engineering design frozen; notebook implementation begins at Gate 4
 
 ## Roles of Colab and Python files
 
@@ -30,14 +30,14 @@ Python modules and scripts own:
 
 ## Planned notebook sequence
 
-The exact files will be created only after the forecasting contract and
-evaluation design are frozen. The planned sequence is:
+Notebook files are created only when their analytical stage begins. The frozen
+sequence is:
 
-1. data validation and state-quarter panel construction;
-2. time-series exploratory analysis;
-3. baseline and rolling-origin evaluation;
-4. candidate-model comparison; and
-5. error, uncertainty, and decision-output analysis.
+1. `01_data_validation_and_panel.ipynb`;
+2. `02_time_series_eda.ipynb`;
+3. `03_baseline_backtesting.ipynb`;
+4. `04_candidate_models.ipynb`; and
+5. `05_error_uncertainty_decision_output.ipynb`.
 
 These are separate analytical stages, not five independent implementations of
 the pipeline.
@@ -88,6 +88,10 @@ repository and install its recorded dependencies. Drive is used for raw data
 and selected checkpoints, not for full-folder code synchronization. Every run
 must use one checked-out code revision rather than mixing local and Drive
 copies.
+
+Gate 4 will add the package metadata. Development runs will install the checked
+out package from `pyproject.toml`; the final reproducibility run will use the
+exact tested lock file. Notebook cells must not install unrecorded packages.
 
 ## Raw snapshot policy
 
