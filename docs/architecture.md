@@ -1,6 +1,6 @@
 # Architecture
 
-Status: Gate 4 implemented and locally validated; clean Colab run pending
+Status: Gate 4 complete; locally and Colab validated
 
 Last reviewed: 2026-09-21
 
@@ -285,9 +285,9 @@ No model library is included before a candidate class is justified. The
 standard library supplies JSON, hashing, logging, argument parsing, and unit
 testing.
 
-The project metadata will use compatible version bounds. After Gate 4 passes in
-a clean Colab runtime, an exact `requirements-lock.txt` will record the tested
-transitive environment. `pyproject.toml` defines what the project supports;
+The project metadata uses compatible version bounds. The clean Gate 4 Colab run
+is frozen in `requirements-lock.txt`, which records the tested transitive
+environment. `pyproject.toml` defines what the project supports;
 the lock file defines the exact published reproduction environment. Every
 material run manifest records Python, DuckDB, pandas, NumPy, and platform
 versions.

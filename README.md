@@ -9,9 +9,8 @@ services provider.
 ## Project status
 
 The project has completed problem definition, data feasibility, chronological
-evaluation design, and engineering design. The Gate 4 pipeline is implemented
-and validated locally against the frozen raw snapshot; its first clean Google
-Colab reproduction remains pending.
+evaluation design, engineering design, and the validated data pipeline. Gate 4
+passed locally and in a clean Google Colab runtime against the frozen snapshot.
 
 - The business problem and decision context are approved.
 - Gate 1 data feasibility is complete for the frozen 2026-09-20 snapshot.
@@ -20,9 +19,11 @@ Colab reproduction remains pending.
   holdout are fixed before model development.
 - Gate 3 selected DuckDB, Parquet checkpoints, a minimal Python package,
   machine-readable configuration, run manifests, and a risk-based test plan.
-- Gate 4 local validation reproduced all frozen source and transformation
-  counts, built 183,301 mine-quarter rows and 2,718 state-quarter rows, and
-  passed ten synthetic tests.
+- Gate 4 reproduced all frozen source and transformation counts, built 183,301
+  mine-quarter rows and 2,718 state-quarter rows, passed ten synthetic tests,
+  and produced identical Parquet hashes on Windows and Colab.
+- The exact Colab runtime dependency closure is frozen in
+  `requirements-lock.txt`.
 - No candidate forecasting model has been selected or evaluated.
 - No performance or business-impact claim is made yet.
 
@@ -89,6 +90,13 @@ python -m unittest discover -s tests -v
 python scripts/build_dataset.py
 ```
 
+The frozen Colab environment can be reproduced with:
+
+```text
+python -m pip install -r requirements-lock.txt
+python -m pip install -e . --no-deps
+```
+
 The command validates filenames, byte sizes, headers, row structure, SHA-256
 hashes, source counts, keys, numeric fields, mine-master coverage, and
 missing-value totals before writing either checkpoint. Existing checkpoints
@@ -111,10 +119,9 @@ in Colab and set its single private Drive root.
 
 ## Next gate
 
-Complete the clean Colab run of notebook 01 and record its exact dependency
-lock. Gate 5 can begin only after that reproduction passes. Gate 5 implements
-the frozen persistence and seasonal-naive baselines under the approved
-chronological design; candidate-model selection remains later.
+Gate 4 is complete. Gate 5 will implement the frozen persistence and
+seasonal-naive baselines under the approved chronological design. Candidate
+model selection remains deferred until baseline evidence exists.
 
 ## License and attribution
 

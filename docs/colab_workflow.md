@@ -1,6 +1,6 @@
 # Google Colab Workflow
 
-Status: notebook 01 implemented; first clean Colab reproduction pending
+Status: notebook 01 reproduced successfully in clean Colab; Gate 4 complete
 
 ## Roles of Colab and Python files
 
@@ -89,13 +89,13 @@ and selected checkpoints, not for full-folder code synchronization. Every run
 must use one checked-out code revision rather than mixing local and Drive
 copies.
 
-Package metadata is defined in `pyproject.toml`. Development runs install the
-checked-out package from that file. After notebook 01 passes in a clean Colab
-runtime, its exact tested transitive versions will be recorded in
-`requirements-lock.txt`; until then, no lock file is claimed as Colab-tested.
-Notebook cells must not install unrecorded packages.
+Package metadata is defined in `pyproject.toml`. Development runs may install
+the checked-out package from that file. The clean Gate 4 Colab run is recorded
+in `requirements-lock.txt`, and notebook 01 now installs that lock before the
+editable project package. Notebook cells must not install unrecorded packages.
 
-The notebook writes `requirements-lock-candidate.txt` beside the run manifest.
+The notebook also writes `requirements-lock-candidate.txt` beside each run
+manifest.
 It resolves only the installed runtime dependency closure of DuckDB,
 Matplotlib, NumPy, and pandas; it deliberately excludes unrelated packages
 preinstalled by Colab.

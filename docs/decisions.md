@@ -212,3 +212,35 @@ future source snapshot that changes row shape, header, size, or hash fails
 before transformation and requires a new dated decision rather than silently
 reusing this parser assumption. This decision refines DEC-006's expectation
 that both files could be read directly as Latin-1.
+
+## DEC-008: Close Gate 4 on cross-environment reproduction
+
+Date: 2026-09-21
+
+Status: Accepted; Gate 4 complete
+
+Decision:
+
+Accept clean Colab run `20260921T130122Z_770aedae_bbefbe` as the Gate 4
+reproduction and freeze its project dependency closure in
+`requirements-lock.txt`. Keep the executed notebook and private run manifest
+outside Git; retain the clean notebook, lock, configuration, SQL, tests, and
+rebuild instructions publicly.
+
+Evidence:
+
+- code revision `770aedae8d2308e2b757a6713ad0bf8b05d99b62`;
+- all ten synthetic tests returned success;
+- 183,301 mine-quarter rows, 1,142,527 bytes, SHA-256
+  `8d757383289b59de1d297b4ab1df578d2d87f5e30a5650ff519ce1a7cd92a78f`;
+- 2,718 state-quarter rows, 46,910 bytes, SHA-256
+  `f18fcfaac7fbeb87c180a89de9077a67b8ab36846824e39bd56bc1712c5782ea`;
+- identical checkpoint hashes in local Windows and Google Colab runs; and
+- 27 states or territories, 2000Q1 through 2026Q2, with zero null regional
+  targets in the observed state-quarter checkpoint.
+
+Consequence:
+
+Gate 5 may implement only the already frozen persistence and seasonal-naive
+baselines plus their chronological evaluation tests. This decision does not
+authorize a candidate model, holdout evaluation, or performance claim.
