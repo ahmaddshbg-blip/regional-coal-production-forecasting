@@ -364,3 +364,79 @@ def build_dataset(
     )
 
     return {**manifest, "manifest_path": str(manifest_path)}
+
+
+def load_latest_validated_manifest(
+    config_path: str | Path = "configs/project.json",
+    *,
+    root: str | Path | None = None,
+) -> dict[str, Any]:
+    """Reuse the newest matching run only after validating its full lineage."""
+    repository_root = Path(root).expanduser().resolve() if root else project_root()
+    candidate_config = Path(config_path).expanduser()
+    if not candidate_config.is_absolute():
+        candidate_config = repository_root / candidate_config
+    config = load_config(candidate_config)
+    paths = resolve_pipeline_paths(config, repository_root)
+    expected_config_hash = config_sha256(config)
+
+    candidates = sorted(
+        paths["runs_root"].glob("*/manifest.json"),
+        key=lambda path: path.parent.name,
+        reverse=True,
+    )
+    selected_path: Path | None = None
+    selected_manifest: dict[str, Any] | None = None
+    for manifest_path in candidates:
+        try:
+            candidate = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if (
+            candidate.get("status") == "passed"
+            and candidate.get("checkpoint_id") == config["snapshot"]["checkpoint_id"]
+            and candidate.get("config_sha256") == expected_config_hash
+        ):
+            selected_path = manifest_path
+            selected_manifest = candidate
+            break
+
+    if selected_path is None or selected_manifest is None:
+        raise ValidationError(
+            "Existing checkpoints have no passed run manifest matching the current "
+            "snapshot and configuration. Rebuild with overwrite=True only after review."
+        )
+
+    current_inputs = {
+        "quarterly_production": validate_raw_file(
+            paths["quarterly_raw"], config["raw_files"]["quarterly_production"]
+        ),
+        "mine_master": validate_raw_file(
+            paths["mine_master_raw"], config["raw_files"]["mine_master"]
+        ),
+    }
+    for name, current in current_inputs.items():
+        recorded = selected_manifest.get("inputs", {}).get(name, {})
+        if (
+            recorded.get("sha256") != current["sha256"]
+            or recorded.get("bytes") != current["bytes"]
+        ):
+            raise ValidationError(f"Recorded input identity does not match: {name}")
+
+    expected_outputs = {
+        "mine_quarter": paths["mine_quarter"],
+        "state_quarter": paths["state_quarter"],
+    }
+    for name, output_path in expected_outputs.items():
+        recorded = selected_manifest.get("outputs", {}).get(name, {})
+        expected_relative_path = output_path.relative_to(paths["data_root"]).as_posix()
+        if recorded.get("path") != expected_relative_path:
+            raise ValidationError(f"Recorded output path does not match: {name}")
+        if not output_path.is_file():
+            raise ValidationError(f"Recorded checkpoint is missing: {output_path.name}")
+        if recorded.get("bytes") != output_path.stat().st_size:
+            raise ValidationError(f"Recorded checkpoint size does not match: {name}")
+        if recorded.get("sha256") != sha256_file(output_path):
+            raise ValidationError(f"Recorded checkpoint SHA-256 does not match: {name}")
+
+    return {**selected_manifest, "manifest_path": str(selected_path)}

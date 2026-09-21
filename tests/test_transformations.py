@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 import duckdb
 
-from coal_forecasting.pipeline import build_dataset
+from coal_forecasting.pipeline import build_dataset, load_latest_validated_manifest
 from coal_forecasting.validation import ValidationError, sha256_file
 
 
@@ -148,6 +148,20 @@ class TransformationTests(unittest.TestCase):
         self.assertTrue(state_path.is_file())
         self.assertEqual(manifest["outputs"]["mine_quarter"]["rows"], 3)
         self.assertEqual(manifest["outputs"]["state_quarter"]["rows"], 3)
+
+        with patch.dict(
+            os.environ,
+            {
+                "PROJECT_DATA_ROOT": str(self.data_root),
+                "PROJECT_RUNS_ROOT": str(self.runs_root),
+            },
+            clear=False,
+        ):
+            reused_manifest = load_latest_validated_manifest(
+                self.config_path,
+                root=repository_root,
+            )
+        self.assertEqual(reused_manifest["run_id"], manifest["run_id"])
 
         connection = duckdb.connect(database=":memory:")
         try:

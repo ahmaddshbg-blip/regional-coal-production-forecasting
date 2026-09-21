@@ -110,8 +110,10 @@ is not used. The notebook then:
 7. displays the panel summary and a non-modeling production time series.
 
 Leave `OVERWRITE_EXISTING_CHECKPOINTS = False` on the first run. A later
-intentional rebuild may set it to `True` after confirming that the snapshot and
-configuration have not changed.
+rerun will reuse existing checkpoints only after the current raw files,
+configuration hash, matching passed manifest, output sizes, and output hashes
+are validated. Set the flag to `True` only for an intentional rebuild after
+confirming that the snapshot and configuration have not changed.
 
 ## Raw snapshot policy
 
