@@ -1,7 +1,7 @@
 # Google Colab Workflow
 
-Status: notebook 01 reproduced successfully in clean Colab; notebook 02 ready
-for Gate 5 EDA execution
+Status: notebooks 01 and 02 reproduced successfully in clean Colab; baseline
+notebook is next
 
 ## Roles of Colab and Python files
 

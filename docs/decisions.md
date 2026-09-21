@@ -285,3 +285,53 @@ The final holdout-performance gate remains closed. Public claims must
 distinguish an unopened holdout evaluation from the stronger and no longer
 accurate claim that every aggregate post-development target value remained
 unseen.
+
+## DEC-010: Close pre-baseline EDA without target correction
+
+Date: 2026-09-21
+
+Status: Accepted after clean Colab reproduction of notebook 02
+
+Decision:
+
+Retain the validated state-quarter target exactly as constructed. Do not
+impute absent quarters, replace reported zeros, remove flagged changes,
+winsorize production, or select a target transformation before baseline
+evaluation. Continue to determine state eligibility independently at each
+forecast origin under the frozen rule. Proceed next to tested persistence and
+annual seasonal-persistence backtesting; do not select a candidate model from
+EDA alone.
+
+Evidence:
+
+- Colab executed code revision
+  `82f901965e780e79324d25d6c0f566a31025bb02` with all 16 tests passing and
+  validated run `20260921T130122Z_770aedae_bbefbe`.
+- The full structural grid has 144 absent state-quarter cells. The development
+  value window contains 1,988 rows, 27 represented states, zero null targets,
+  and 114 reported-zero targets.
+- Wyoming contributes approximately 39.3 percent of development-window volume.
+  The quarterly top-five state share ranges from 68.1 to 75.0 percent, which
+  reinforces the need to report both pooled WAPE and state-balanced MASE.
+- Median calendar-quarter shares range only from 24.8 to 25.4 percent across
+  467 complete state-years. This does not justify discarding the frozen annual
+  seasonal baseline, but it provides no evidence for assuming strong common
+  seasonality across states.
+- Average national quarterly production in 2021 was approximately 46 percent
+  below 2003, with visible structural declines and a large 2020 disruption.
+  Baselines must therefore be characterized by origin and regime, not only by
+  one aggregate score.
+- The robust diagnostic retains 91 flagged state-quarter changes across 18
+  states, including 26 in 2020 and 21 whose current target is zero. The 3,728
+  associated mine-quarter rows contain no all-null or partially-null production
+  aggregates, so the flags do not provide evidence of a missing-value defect.
+- Development eligibility remains within the frozen range of 24 to 26 states,
+  and the observed entry and exit transitions reproduce the forecasting
+  contract.
+
+Consequence:
+
+EDA creates no data-remediation blocker and does not authorize model or feature
+selection. Notebook 03 may implement the two frozen baselines, prediction-cell
+coverage checks, horizon-level metrics, and origin/state diagnostics using only
+development origins. Final holdout performance remains unopened.
