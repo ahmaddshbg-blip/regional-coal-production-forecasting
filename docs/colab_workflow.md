@@ -95,6 +95,11 @@ runtime, its exact tested transitive versions will be recorded in
 `requirements-lock.txt`; until then, no lock file is claimed as Colab-tested.
 Notebook cells must not install unrecorded packages.
 
+The notebook writes `requirements-lock-candidate.txt` beside the run manifest.
+It resolves only the installed runtime dependency closure of DuckDB,
+Matplotlib, NumPy, and pandas; it deliberately excludes unrelated packages
+preinstalled by Colab.
+
 ## Notebook 01 execution
 
 Open `notebooks/01_data_validation_and_panel.ipynb` in Colab and run it from a
