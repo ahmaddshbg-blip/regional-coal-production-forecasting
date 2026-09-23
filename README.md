@@ -31,16 +31,17 @@ passed locally and in a clean Google Colab runtime against the frozen snapshot.
   `62a3b84d8d7a7617ac8fc3798b053adb9ac97e7d`. The versioned run reproduced
   every frozen Gate 2 scored-cell, WAPE, and median-state MASE audit value with
   100 percent prediction coverage and without opening the holdout.
-- `DEC-012` freezes one development-only candidate procedure: four direct
-  pooled Ridge models that learn a regularized `log1p` trend correction to
-  persistence. Its features, tuning boundary, uncertainty method, and failure
-  behavior are fixed before implementation.
-- `DEC-013` freezes model-specific diagnostics and an iteration boundary: hard
-  leakage or coverage failures stop the run, while residual and assumption
-  warnings are interpreted according to their effect on point forecasts,
-  pooling, or uncertainty before confirmation results are opened.
-- No candidate forecasting model has been implemented or evaluated.
-- No performance or business-impact claim is made yet.
+- `DEC-012` and `DEC-013` froze the first candidate and its model-specific
+  diagnostic return path before implementation. The log-change Ridge passed
+  engineering checks but failed selection with mean WAPE skill of `-52.71%`.
+- `DEC-015` authorized one diagnosis-driven raw-delta Ridge successor. It
+  passed 100 percent prediction coverage and interval calibration, but mean
+  WAPE skill was only `0.63%`, below the frozen `5%` materiality threshold;
+  its paired bootstrap interval also crossed zero.
+- `DEC-016` rejects v2, stops candidate-family iteration, and retains the
+  frozen horizon-specific baseline. Candidate confirmation and the final
+  holdout remain unopened.
+- No claim of incremental model performance or business impact is made.
 
 ## Problem statement
 
@@ -130,6 +131,18 @@ The command validates checkpoint lineage, evaluates only the frozen 54
 development origins, verifies the pre-implementation audit table, and writes
 versioned forecast and metric artifacts under the configured runs root.
 
+The selection-only candidate evaluator can be reproduced with either frozen
+configuration:
+
+```text
+python scripts/evaluate_candidate_selection.py --candidate-config configs/candidate.json
+python scripts/evaluate_candidate_selection.py --candidate-config configs/candidate_v2.json
+```
+
+Both commands stop with `diagnostic_gate_status = awaiting_review` and write
+versioned point, diagnostic, interval, and bootstrap artifacts. They do not
+open confirmation or holdout data.
+
 ## Analytical boundaries
 
 - This is a public-data demonstration of a realistic mining-planning problem.
@@ -144,14 +157,15 @@ versioned forecast and metric artifacts under the configured runs root.
 
 ## Next gate
 
-Data validation, holdout-safe EDA, development baseline backtesting, and the
-candidate-procedure design are complete. The next gate may implement the
-frozen procedure in tested reusable modules and a clean notebook 04, then
-evaluate its selection diagnostics before opening confirmation results. The
-holdout remains closed until one locked procedure passes every frozen
-promotion rule and a separate review
-authorizes final evaluation. See the
-[candidate procedure](docs/candidate_procedure.md) for the exact boundary.
+Data validation, holdout-safe EDA, baseline backtesting, candidate
+implementation, and selection diagnostics are complete. Neither locked
+candidate qualified for confirmation. The next gate is publication-oriented:
+create a readable notebook 04 that reproduces the failed selection experiments
+without opening later blocks, then decide whether the project closes with the
+retained baseline or begins a separately governed future experiment. See the
+[v1 procedure](docs/candidate_procedure.md),
+[v2 procedure](docs/candidate_procedure_v2.md), and
+[decision log](docs/decisions.md) for the exact boundary.
 
 ## License and attribution
 

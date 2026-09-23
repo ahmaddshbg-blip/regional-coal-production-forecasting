@@ -71,7 +71,7 @@ def development_origin_labels(evaluation: dict[str, Any]) -> list[str]:
     return origins
 
 
-def _seasonal_scale_at_origins(
+def seasonal_scale_at_origins(
     panel: pd.DataFrame,
     eligibility: pd.DataFrame,
     *,
@@ -116,19 +116,17 @@ def _seasonal_scale_at_origins(
     )
 
 
-def build_development_forecast_cells(
+def build_forecast_cells_for_origins(
     panel: pd.DataFrame,
     evaluation: dict[str, Any],
+    *,
+    origins: list[str],
+    target_end: str,
 ) -> pd.DataFrame:
     prepared = prepare_state_panel(panel)
-    origins = development_origin_labels(evaluation)
-    target_end = add_quarters(
-        evaluation["validation_origins"]["end"],
-        max(evaluation["forecast_horizons"]),
-    )
     if prepared["quarter_start_date"].max() > period_start(target_end):
         raise EvaluationGuardError(
-            f"Development evaluator received target values after {target_end}"
+            f"Evaluator received target values after {target_end}"
         )
 
     eligibility = origin_eligibility(
@@ -141,7 +139,7 @@ def build_development_forecast_cells(
         ],
     )
     eligibility = eligibility.loc[eligibility["eligible"]].copy()
-    eligibility = _seasonal_scale_at_origins(
+    eligibility = seasonal_scale_at_origins(
         prepared,
         eligibility,
         modeling_start=evaluation["modeling_start"],
@@ -187,6 +185,23 @@ def build_development_forecast_cells(
             "mase_scale_observations",
         ]
     ].sort_values(["origin_date", "state_code", "horizon"]).reset_index(drop=True)
+
+
+def build_development_forecast_cells(
+    panel: pd.DataFrame,
+    evaluation: dict[str, Any],
+) -> pd.DataFrame:
+    origins = development_origin_labels(evaluation)
+    target_end = add_quarters(
+        evaluation["validation_origins"]["end"],
+        max(evaluation["forecast_horizons"]),
+    )
+    return build_forecast_cells_for_origins(
+        panel,
+        evaluation,
+        origins=origins,
+        target_end=target_end,
+    )
 
 
 def verify_frozen_baseline_audit(metrics: pd.DataFrame) -> None:

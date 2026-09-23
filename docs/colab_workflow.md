@@ -164,18 +164,24 @@ candidate procedure and its information-availability rules are frozen.
 
 ## Notebook 04 boundary
 
-`DEC-012` now freezes `pooled_direct_ridge_log_change_v1`; the full procedure is
-documented in [`candidate_procedure.md`](candidate_procedure.md). Notebook 04
-may be created only as a readable interface to the tested implementation of
-that procedure. It may not search additional feature sets, transformations,
-training windows, model families, interval methods, or holdout outcomes.
+`DEC-014` and `DEC-016` reject both frozen candidate procedures on the
+36-origin selection block. Confirmation and holdout were never opened.
+Notebook 04 may now be created only as a readable reproduction of those failed
+selection experiments and their diagnostic return path. It must not search
+additional features, transformations, model families, intervals, or later
+outcomes.
 
 The notebook must run the complete tests, validate data and baseline lineage,
-evaluate only the 54 development origins, display the selection and untouched
-confirmation blocks separately, display the `DEC-013` selection diagnostic
-gate before confirmation results, and write a versioned manifest with
-`holdout_opened = false`. A passing development result triggers a separate
-review; it does not authorize holdout execution automatically.
+call the reusable selection-only evaluator, display alpha selection, point
+metrics, residual diagnostics, interval calibration, paired bootstrap results,
+and the frozen rejection criteria. Every generated manifest must retain
+`diagnostic_gate_status = awaiting_review`, `confirmation_opened = false`, and
+`holdout_opened = false`. The v1 and v2 review decisions live in the decision
+log rather than being inferred automatically by notebook code.
+
+The exact candidate dependency lock must be refreshed from a clean Colab
+runtime after this notebook succeeds. The existing lock remains the accepted
+data-pipeline environment and must not be relabelled as candidate evidence.
 
 ## Raw snapshot policy
 

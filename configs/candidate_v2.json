@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "procedure_id": "pooled_direct_ridge_raw_delta_v2",
+  "alpha_grid": [1.0, 100.0, 10000.0, 1000000.0],
+  "tie_tolerance": 0.0001,
+  "selection_origins": {
+    "start": "2007Q4",
+    "end": "2016Q3",
+    "count": 36
+  },
+  "confirmation_origins": {
+    "start": "2016Q4",
+    "end": "2021Q1",
+    "count": 18
+  },
+  "features": {
+    "numeric": [
+      "level_t",
+      "raw_change_1",
+      "raw_change_2",
+      "raw_change_3",
+      "recent_zero_count",
+      "origin_index"
+    ],
+    "categorical": [
+      "state_code",
+      "target_quarter"
+    ]
+  },
+  "intervals": {
+    "warmup_origins": 8,
+    "coverages": [0.8, 0.95]
+  },
+  "bootstrap": {
+    "block_length": 4,
+    "replications": 2000,
+    "seed": 20260920
+  }
+}

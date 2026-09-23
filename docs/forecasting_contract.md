@@ -283,12 +283,16 @@ or if holdout skill is non-positive overall, retain the appropriate baseline
 and state clearly that added predictive value was not established. That is a
 valid project result, not a reason to search models until one wins.
 
-`DEC-012` freezes the development candidate as
-`pooled_direct_ridge_log_change_v1`. Its feature, fitting, tuning, interval,
-bootstrap, and failure rules are specified in
-[`candidate_procedure.md`](candidate_procedure.md). This candidate decision
-does not alter the target, split, baselines, metrics, promotion criteria, or
-holdout policy in this contract.
+`DEC-012` froze `pooled_direct_ridge_log_change_v1`, which failed its selection
+diagnostic gate before confirmation. `DEC-015` then froze one mechanism-based
+successor, `pooled_direct_ridge_raw_delta_v2`; it also failed the unchanged
+promotion criteria. Their specifications and outcomes are recorded in
+[`candidate_procedure.md`](candidate_procedure.md) and
+[`candidate_procedure_v2.md`](candidate_procedure_v2.md). `DEC-016` stops
+candidate-family iteration and retains the horizon-specific baseline without
+opening candidate confirmation or holdout results. None of these decisions
+changes the target, split, metrics, promotion criteria, or holdout policy in
+this contract.
 
 ## Uncertainty evaluation
 

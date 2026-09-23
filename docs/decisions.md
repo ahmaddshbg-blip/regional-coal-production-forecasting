@@ -490,3 +490,141 @@ decision before confirmation is opened. After confirmation results are seen,
 they cannot be used for retuning; failure is reported. Holdout results can
 never revise the procedure. The full diagnostic specification is part of
 [`candidate_procedure.md`](candidate_procedure.md).
+
+## DEC-014: Reject the log-change Ridge candidate before confirmation
+
+Date: 2026-09-23
+
+Status: Rejected at the selection diagnostic gate
+
+Decision:
+
+Reject `pooled_direct_ridge_log_change_v1` using selection run
+`20260923T062835Z_3831181d_38d675`. Do not open its confirmation results and do
+not patch its transformation, bias, features, or alpha grid under the same
+procedure identifier.
+
+Evidence:
+
+- All 41 implementation tests passed and every one of the 3,744 candidate
+  forecasts was finite and scored. No confirmation or holdout origin was read.
+- Alpha `100` was best among the four frozen values, but all values had
+  negative mean WAPE skill. The selected mean skill was `-0.5271`.
+- Paired four-quarter moving-block bootstrap intervals were negative for H3,
+  H4, and the equal-weight horizon mean. The mean-skill 95 percent interval was
+  `[-1.0076, -0.0209]`.
+- Candidate WAPE was 8.93, 13.99, 17.19, and 20.12 percent for H1 through H4,
+  versus comparator WAPE of 7.85, 10.27, 10.32, and 10.35 percent.
+- Aggregate signed bias was `-3.10`, `-9.53`, `-12.72`, and `-15.44` percent.
+  Under the frozen `forecast - actual` convention, v1 increasingly
+  underforecast production.
+- Underforecasting concentrated in the highest fitted-value and level deciles.
+  Median within-state lag-one residual correlation was `0.459`, `0.640`, and
+  `0.764` at H2 through H4, indicating remaining dynamics.
+- Zero-floor rates stayed below 0.6 percent, all states were represented in
+  training, numeric condition numbers stayed below 2.9, and feature exclusion
+  counts were negligible. These checks do not support blaming the failure on
+  coverage, unseen categories, or numerical instability.
+
+Interpretation:
+
+The unweighted squared-error fit on `log1p` changes is misaligned with the
+raw-ton WAPE decision metric. Inverse transformation also converts an adequate
+conditional log forecast into a systematically low raw-scale point forecast
+when dispersion is material. Regularized common dynamics do not remove the
+long-horizon dependence left in residuals.
+
+Consequence:
+
+V1 is a completed failed experiment. Its artifacts remain reproducible, but it
+cannot enter confirmation. One successor may be specified from this diagnosed
+mechanism; it must be frozen under a new identifier before implementation and
+must stop permanently at the selection gate if it does not improve on the
+frozen comparator.
+
+## DEC-015: Freeze a raw-delta persistence-anchored Ridge successor
+
+Date: 2026-09-23
+
+Status: Accepted before v2 implementation
+
+Decision:
+
+Freeze `pooled_direct_ridge_raw_delta_v2` as the single authorized successor.
+Fit four direct pooled Ridge models to raw-ton changes from persistence, with
+no intercept so complete shrinkage returns exactly to persistence. Use origin-
+safe raw level, three raw quarterly changes, recent zero count, calendar time,
+target quarter, and state. Standardize numeric features within each outer
+training boundary and retain equal row weights.
+
+Use the fixed alpha grid `1`, `100`, `10000`, and `1000000`, selecting one
+shared alpha on the same 36-origin selection block with the existing WAPE-skill
+and tie rule. Keep the same prequential interval and paired moving-block
+bootstrap procedures. The complete specification is recorded in
+[`candidate_procedure_v2.md`](candidate_procedure_v2.md).
+
+Reason:
+
+This is a mechanism-based correction, not an unrestricted model search. Raw-
+delta fitting removes the inverse-log point-forecast bias and makes the loss
+sensitive to tonnage errors that drive WAPE. The zero-intercept correction
+nests persistence as alpha becomes large, so the candidate cannot invent a
+global drift when all learned corrections should shrink away.
+
+Consequence:
+
+V2 must be implemented test-first and evaluated only on the selection block.
+Its raw-scale linearity, volume concentration, coefficient stability, residual
+dependence, and interval calibration require the same explicit review. If v2
+fails the selection gate, retain the frozen baseline and stop candidate-family
+iteration; do not create v3. Confirmation and holdout remain closed.
+
+## DEC-016: Reject v2 and stop candidate-family iteration
+
+Date: 2026-09-23
+
+Status: Rejected at the selection diagnostic gate
+
+Decision:
+
+Reject `pooled_direct_ridge_raw_delta_v2` using selection run
+`20260923T065208Z_3831181d_e59ae8`. Retain the frozen horizon-specific baseline
+and stop candidate-family iteration. Do not open candidate confirmation or
+holdout results, and do not create a v3 to search for a favorable result.
+
+Evidence:
+
+- All 46 tests passed, prediction coverage was 100 percent, and all 3,744
+  selection forecasts were scored without reading later origins.
+- Alpha `10000` maximized the frozen selection objective. Mean horizon WAPE
+  skill was `0.0063`, below the required `0.05` materiality threshold.
+- The paired moving-block bootstrap 95 percent interval for mean skill was
+  `[-0.0220, 0.0294]`; improvement was not robustly distinguishable from zero.
+- Skill was `0.0061`, `0.0290`, `-0.0115`, and `0.0017` at H1 through H4.
+  The three-of-four positive-skill condition passed exactly, but H3 remained
+  negative and the materiality and state-balanced criteria failed.
+- The equal-weight mean of horizon median state MASE was `1.1112`, worse than
+  the fixed comparator value of `1.0796`.
+- Nominal 80 percent interval coverage ranged from 78.2 to 81.2 percent and 95
+  percent coverage ranged from 95.2 to 95.6 percent. Interval calibration
+  passed, but it cannot compensate for immaterial point skill.
+- Median within-state lag-one residual correlation was `0.398` at H3 and
+  `0.503` at H4. Zero-floor use rose from 5.9 percent at H1 to 10.0 percent at
+  H4, concentrated in low-output cases.
+
+Interpretation:
+
+The raw-delta response fixed v1's scale mismatch and returned performance close
+to persistence, as intended by its nested design. It did not establish useful
+incremental forecasting value. The result supports the simple baseline rather
+than another model-family search on the same selection data.
+
+Consequence:
+
+Project 02 may publish the two failed, leakage-safe candidate experiments as
+evidence of disciplined model governance and retain persistence at H1, H2, and
+H4 and seasonal naive at H3 for the current planning forecast. Candidate
+confirmation and the final comparative holdout remain unopened because no
+candidate qualified to enter them. A future new experiment would require a
+newly dated research question, procedure, and evaluation policy rather than a
+continuation of this search.

@@ -1,12 +1,17 @@
 # Candidate Procedure
 
-Status: Frozen before implementation on 2026-09-23
+Status: Rejected at the selection diagnostic gate on 2026-09-23
 
 Decision record: `DEC-012`
 
 Diagnostic governance: `DEC-013`
 
 Procedure identifier: `pooled_direct_ridge_log_change_v1`
+
+Selection run: `20260923T062835Z_3831181d_38d675`
+
+This file remains the immutable specification of v1. The result-driven review
+is recorded in `DEC-014`; no confirmation origin was opened.
 
 ## Purpose
 
@@ -18,6 +23,26 @@ and failure behavior before candidate code or notebook 04 exists.
 Freezing the procedure does not claim that it will outperform the baselines.
 It prevents feature or model changes from being made in response to candidate
 or holdout results.
+
+## Selection outcome
+
+The implementation validity checks passed, but the model-working diagnostic
+gate failed. Alpha `100` was the best frozen setting, yet equal-weight mean
+WAPE skill against the horizon-specific comparators was `-0.5271`. Its paired
+four-quarter moving-block bootstrap 95 percent interval was `[-1.0076,
+-0.0209]`. Horizon skill deteriorated from `-0.1377` at H1 to `-0.9440` at H4.
+
+Raw-scale signed bias was negative at every horizon and worsened from `-3.10`
+percent at H1 to `-15.44` percent at H4. The largest fitted-value decile
+accounted for severe underforecasting, and within-state lag-one residual
+correlation increased materially at longer horizons. Prediction coverage was
+100 percent, zero flooring was below 0.6 percent, no state was unseen, and
+numeric condition numbers remained below 2.9. The failure is therefore a
+model-scale and dynamic-specification problem, not an engineering-validity or
+conditioning failure.
+
+The confirmation block and holdout remain unopened. V1 cannot be promoted or
+patched. Any successor requires a new procedure identifier and dated decision.
 
 ## Candidate hypothesis
 
