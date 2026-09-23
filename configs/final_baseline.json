@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "procedure_id": "horizon_specific_naive_baseline_v1",
+  "models_by_horizon": {
+    "1": "persistence",
+    "2": "persistence",
+    "3": "seasonal_naive",
+    "4": "persistence"
+  },
+  "development_calibration_origins": {
+    "start": "2007Q4",
+    "end": "2021Q1",
+    "count": 54
+  },
+  "holdout_origins": {
+    "start": "2022Q2",
+    "end": "2025Q1",
+    "count": 12,
+    "target_end": "2026Q1"
+  },
+  "latest_forecast": {
+    "origin": "2026Q2",
+    "target_end": "2027Q2",
+    "revision_status": "latest_available_snapshot_subject_to_revision"
+  },
+  "intervals": {
+    "coverages": [0.8, 0.95],
+    "normalization": "origin_time_state_seasonal_mase_scale",
+    "fallback": "pooled_unscaled_absolute_error",
+    "lower_bound": 0.0
+  },
+  "reporting": {
+    "operational_focus_horizons": [1, 2],
+    "reported_horizons": [1, 2, 3, 4],
+    "primary_metric": "WAPE",
+    "secondary_metric": "seasonal_MASE"
+  }
+}

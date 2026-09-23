@@ -1,7 +1,7 @@
 # Google Colab Workflow
 
-Status: notebooks 01, 02, and 03 reproduced successfully in clean Colab;
-candidate procedure frozen, notebook 04 not yet implemented
+Status: notebooks 01 through 04 reproduced successfully in clean Colab;
+final baseline procedure frozen and Notebook 05 ready for one-time execution
 
 ## Roles of Colab and Python files
 
@@ -37,8 +37,8 @@ sequence is:
 1. `01_data_validation_and_panel.ipynb`;
 2. `02_time_series_eda.ipynb`;
 3. `03_baseline_backtesting.ipynb`;
-4. `04_candidate_models.ipynb`; and
-5. `05_error_uncertainty_decision_output.ipynb`.
+4. `04_candidate_selection_and_diagnostics.ipynb`; and
+5. `05_final_holdout_and_latest_forecast.ipynb`.
 
 These are separate analytical stages, not five independent implementations of
 the pipeline.
@@ -190,6 +190,29 @@ The accepted Colab execution used revision
 worktree and retained `confirmation_opened = false` and
 `holdout_opened = false`. This closes candidate selection only. It does not
 authorize final holdout access.
+
+## Notebook 05 boundary
+
+`DEC-018` freezes `horizon_specific_naive_baseline_v1`: persistence at H1, H2,
+and H4, and annual seasonal naive at H3. Its 80 and 95 percent intervals use
+only residuals from the 54 development origins. The point rules, calibration,
+holdout origins, metrics, outputs, and interpretation boundaries cannot change
+after the final holdout is opened.
+
+Open `notebooks/05_final_holdout_and_latest_forecast.ipynb` in a fresh Colab
+runtime. Run through the tests first. On the authorized first execution, review
+the boundary text and deliberately change `OPEN_FINAL_HOLDOUT = False` to
+`True`. The runner writes `runs/final_holdout_opened.json` before reading
+holdout target magnitudes, evaluates the 12 origins once, writes hashed
+artifacts and a passed manifest, then marks the opening record complete.
+
+A normal rerun validates and reuses a matching passed run rather than scoring
+the holdout again. If the opening marker exists without a passed manifest, do
+not delete it or rerun automatically; record and review the failure first.
+Notebook 05 reports H1-H4 point and interval performance and creates unscored
+forecasts from `2026Q2` through `2027Q2`. H1-H2 rankings are review priorities,
+not direct predictions of fleet, workforce, service demand, revenue, or causal
+effects.
 
 ## Raw snapshot policy
 

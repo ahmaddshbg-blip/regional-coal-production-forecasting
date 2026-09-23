@@ -668,3 +668,45 @@ development-only uncertainty calibration, the one-time holdout report, and the
 latest-origin forecast outputs. The final method will emphasize H1 and H2 for
 near-term operating decisions while preserving H1 through H4 to avoid changing
 the evaluation horizon after observing results.
+
+## DEC-018: Freeze the final simple-baseline forecasting procedure
+
+Date: 2026-09-23
+
+Status: Accepted before final-holdout implementation
+
+Decision:
+
+Freeze `horizon_specific_naive_baseline_v1` as the final method. Use
+persistence at H1, H2, and H4 and annual seasonal naive at H3. Emphasize H1 and
+H2 for near-term planning while continuing to report all four horizons.
+
+Calibrate 80 and 95 percent state-scale-normalized conformal intervals using
+only the selected baseline residuals from all 54 development origins. Freeze
+the horizon-specific normalized and unscaled quantiles before any holdout
+target is read. Evaluate the method once on the 12 holdout origins and then
+produce unscored forecasts from `2026Q2` through `2027Q2`. The complete
+specification is recorded in
+[`final_baseline_procedure.md`](final_baseline_procedure.md).
+
+Reason:
+
+The portfolio objective is to demonstrate defensible work with data,
+forecasting, documentation, and business interpretation rather than propose a
+novel or computationally heavy model. Both candidate experiments failed the
+predeclared improvement criteria, while the simple baselines remained strong,
+transparent, inexpensive, and operationally interpretable.
+
+Alternatives:
+
+No new ARIMA search, tree ensemble, neural model, or hybrid candidate is
+authorized. Reducing the report to H1 and H2 after seeing model results was
+also rejected because it would change the frozen evaluation contract. H1 and
+H2 receive interpretation priority without hiding H3 and H4.
+
+Consequence:
+
+The holdout remains unopened at this decision. Implementation must be
+test-first, require an explicit one-time opening action, and preserve a durable
+marker that prevents silent rescoring. Notebook 05 may be created only as the
+interface to this exact procedure. Holdout results cannot revise the method.

@@ -1,6 +1,6 @@
 # Architecture
 
-Status: Gate 5 complete; candidate procedure frozen before implementation
+Status: Final baseline procedure implemented; one-time Colab holdout run pending
 
 Last reviewed: 2026-09-23
 
@@ -228,15 +228,16 @@ notebooks/
 |-- 01_data_validation_and_panel.ipynb
 |-- 02_time_series_eda.ipynb
 |-- 03_baseline_backtesting.ipynb
-|-- 04_candidate_models.ipynb
-`-- 05_error_uncertainty_decision_output.ipynb
+|-- 04_candidate_selection_and_diagnostics.ipynb
+`-- 05_final_holdout_and_latest_forecast.ipynb
 ```
 
 This is a creation sequence, not permission to add empty folders. Gate 4
 created configuration, data validation, SQL transformation, pipeline, the
 first notebook, and their tests. Gate 5 added the EDA and baseline stages.
-Candidate-model code and notebook 04 do not exist until one complete candidate
-procedure has been justified and frozen.
+Candidate code was added only after each procedure was justified and frozen.
+Notebook 05 was added only after the retained baseline, uncertainty method,
+one-time holdout rule, and latest-origin outputs were recorded in `DEC-018`.
 
 The package stays flat because the project is not large enough to justify
 nested `data`, `features`, `models`, and `evaluation` subpackages. A new module
@@ -381,9 +382,10 @@ raw files are available. The standard test command will be:
 python -m unittest discover -s tests -v
 ```
 
-Holdout execution will require an explicit holdout flag and a locked-candidate
-manifest whose config hash matches the current configuration. Development
-commands must not evaluate holdout rows accidentally.
+Holdout execution requires an explicit holdout flag and the frozen final-
+baseline configuration hash. A durable marker is written before target access;
+a matching passed run is validated and reused, while an incomplete marked run
+blocks automatic retry. Development commands cannot evaluate holdout rows.
 
 ## Execution and storage
 

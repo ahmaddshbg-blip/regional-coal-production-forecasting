@@ -44,6 +44,10 @@ passed locally and in a clean Google Colab runtime against the frozen snapshot.
 - Notebook 04 reproduced both decisions in a clean Colab runtime at revision
   `7a441b6d77b12d0dfca02908d95b4931d001d57a`; both runs matched local results,
   used the accepted data and baseline lineage, and kept later blocks closed.
+- `DEC-018` freezes the retained final method, development-only 80 and 95
+  percent interval calibration, one-time holdout access, and latest-origin
+  output contract. Its test-first implementation and Notebook 05 are complete;
+  the final holdout has not been opened locally and awaits one Colab run.
 - No claim of incremental model performance or business impact is made.
 
 ## Problem statement
@@ -146,6 +150,19 @@ Both commands stop with `diagnostic_gate_status = awaiting_review` and write
 versioned point, diagnostic, interval, and bootstrap artifacts. They do not
 open confirmation or holdout data.
 
+The final procedure can be reused from the command line after its decision
+record is reviewed. The first execution requires the explicit irreversible
+flag; later calls validate and reuse the passed artifacts:
+
+```text
+python scripts/evaluate_final_baseline.py --open-holdout
+```
+
+The primary interface is
+[`05_final_holdout_and_latest_forecast.ipynb`](notebooks/05_final_holdout_and_latest_forecast.ipynb),
+where `OPEN_FINAL_HOLDOUT` defaults to `False` so the first access cannot happen
+silently.
+
 ## Analytical boundaries
 
 - This is a public-data demonstration of a realistic mining-planning problem.
@@ -160,15 +177,14 @@ open confirmation or holdout data.
 
 ## Next gate
 
-Data validation, holdout-safe EDA, baseline backtesting, candidate
-implementation, and clean Colab selection reproduction are complete. Neither
-locked candidate qualified for confirmation, and the horizon-specific baseline
-is retained. The next gate must freeze that baseline's final point forecast,
-development-only uncertainty calibration, one-time holdout report, and latest-
-origin outputs before any final holdout value is read. See the [v1
-procedure](docs/candidate_procedure.md), [v2
-procedure](docs/candidate_procedure_v2.md), and [decision
-log](docs/decisions.md) for the exact boundary.
+Data validation, holdout-safe EDA, baseline backtesting, candidate selection,
+and final-procedure implementation are complete. Neither locked candidate
+qualified for confirmation, so the transparent horizon-specific baseline is
+retained. The next gate is one clean Colab execution of Notebook 05 after the
+operator deliberately changes `OPEN_FINAL_HOLDOUT` to `True`. The resulting
+holdout and latest-origin evidence must then be reviewed without retuning the
+procedure. See the [final baseline procedure](docs/final_baseline_procedure.md)
+and [decision log](docs/decisions.md) for the exact boundary.
 
 ## License and attribution
 

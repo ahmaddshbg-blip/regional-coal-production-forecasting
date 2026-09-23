@@ -294,6 +294,12 @@ opening candidate confirmation or holdout results. None of these decisions
 changes the target, split, metrics, promotion criteria, or holdout policy in
 this contract.
 
+Because no candidate qualified, `DEC-018` locks the retained horizon-specific
+baseline itself as the final forecasting method and authorizes one absolute-
+performance holdout evaluation. This does not reopen candidate confirmation or
+compare a failed candidate on holdout. The original target, origins, horizons,
+metrics, and prohibition on post-holdout retuning remain unchanged.
+
 ## Uncertainty evaluation
 
 The final retained method must provide uncertainty intervals or document why a
