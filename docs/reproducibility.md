@@ -91,7 +91,7 @@ Drive storage while code remains in Git.
 | Final notebook | Completed without error; passed run artifacts reused after validation |
 | Final manifest lineage | Clean Git revision; accepted data and baseline runs |
 | Candidate confirmation | Unopened |
-| Public CI | Configured in `.github/workflows/tests.yml`; badge is authoritative |
+| Public CI | 54 tests passed on Linux/Python 3.13 at commit `aff7200` ([run 35886875632](https://github.com/ahmaddshbg-blip/regional-coal-production-forecasting/actions/runs/35886875632)) |
 | Exact frozen raw snapshot in Git | Excluded because of size; hashes and acquisition instructions published |
 | Exact final run artifacts in Git | Excluded; private Drive artifacts are hash-recorded in the run manifest |
 
