@@ -710,3 +710,52 @@ The holdout remains unopened at this decision. Implementation must be
 test-first, require an explicit one-time opening action, and preserve a durable
 marker that prevents silent rescoring. Notebook 05 may be created only as the
 interface to this exact procedure. Holdout results cannot revise the method.
+
+## DEC-019: Accept the final holdout result without retuning
+
+Date: 2026-09-23
+
+Status: Accepted after reviewed Colab execution of notebook 05
+
+Decision:
+
+Accept final run `20260923T152725Z_8c9ab4d8_e93091` as the one-time holdout
+evidence for `horizon_specific_naive_baseline_v1`. Close model evaluation and
+retain the point procedure unchanged. Publish the uncertainty result as a
+conservative interval failure rather than recalibrating it after holdout.
+
+Evidence:
+
+- All 54 tests passed and the executed notebook contains no error output.
+- The run used code revision
+  `8c9ab4d8aefc45d45ce63b3b2cbb528b54038054`, the accepted data run, baseline
+  run, and frozen snapshot, with a clean worktree.
+- The manifest records `holdout_opened = true`,
+  `candidate_confirmation_opened = false`, and unscored latest forecasts.
+- Prediction coverage is 100 percent at every horizon. WAPE is 9.04 percent at
+  H1 and between 10.46 and 10.66 percent at H2-H4.
+- Aggregate signed bias is positive and rises from 1.04 percent at H1 to about
+  4.2 percent at H3-H4.
+- Pooled empirical interval coverage is 94.16 percent for the nominal 80
+  percent interval and 98.97 percent for the nominal 95 percent interval. Both
+  exceed the frozen upper guardrail and the intervals are excessively wide.
+- The reviewed notebook was a validated reuse of the passed run rather than a
+  second scoring attempt.
+
+Reason:
+
+The point forecast provides transparent, reproducible baseline-level accuracy
+appropriate for a portfolio demonstration. The interval result does not meet
+its nominal calibration objective, but hiding that failure or tuning after the
+holdout would invalidate the project governance. Honest limitation reporting
+is more valuable than forcing a cosmetically successful uncertainty result.
+
+Consequence:
+
+Project 02 forecasting execution is complete. Final claims must use the point
+metrics and regional forecasts with the limits in
+[`final_results.md`](final_results.md). Intervals may be described only as
+conservative review ranges. Candidate confirmation stays closed, and no model,
+interval, threshold, or interpretation may be revised from this holdout. A new
+method would require a new dated experiment and a genuinely untouched future
+evaluation period.

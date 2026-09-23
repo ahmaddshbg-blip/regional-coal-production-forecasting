@@ -1,6 +1,6 @@
 # Architecture
 
-Status: Final baseline procedure implemented; one-time Colab holdout run pending
+Status: Final holdout reviewed; model evaluation complete without retuning
 
 Last reviewed: 2026-09-23
 

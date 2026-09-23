@@ -1,6 +1,6 @@
 # Final Baseline Procedure
 
-Status: Frozen and implemented on 2026-09-23; final holdout remains unopened
+Status: Frozen, implemented, and evaluated once on 2026-09-23; no retuning
 
 Decision record: `DEC-018`
 
@@ -12,7 +12,7 @@ The project did not establish material incremental value from either locked
 Ridge candidate. The final forecasting procedure therefore retains the
 predeclared simple baselines. This is a forecasting result, not a fallback
 hidden after holdout inspection: the method, uncertainty calibration, output
-schema, and one-time access rule are fixed while the holdout remains unopened.
+schema, and one-time access rule were fixed while the holdout was unopened.
 
 The procedure prioritizes reproducibility, transparent theory, low compute,
 and useful regional planning evidence. It does not claim methodological

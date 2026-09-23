@@ -38,16 +38,20 @@ passed locally and in a clean Google Colab runtime against the frozen snapshot.
   passed 100 percent prediction coverage and interval calibration, but mean
   WAPE skill was only `0.63%`, below the frozen `5%` materiality threshold;
   its paired bootstrap interval also crossed zero.
-- `DEC-016` rejects v2, stops candidate-family iteration, and retains the
-  frozen horizon-specific baseline. Candidate confirmation and the final
-  holdout remain unopened.
+- `DEC-016` rejected v2, stopped candidate-family iteration, and retained the
+  frozen horizon-specific baseline. Candidate confirmation remained unopened;
+  final holdout access occurred later only under `DEC-018` and `DEC-019`.
 - Notebook 04 reproduced both decisions in a clean Colab runtime at revision
   `7a441b6d77b12d0dfca02908d95b4931d001d57a`; both runs matched local results,
   used the accepted data and baseline lineage, and kept later blocks closed.
-- `DEC-018` freezes the retained final method, development-only 80 and 95
-  percent interval calibration, one-time holdout access, and latest-origin
-  output contract. Its test-first implementation and Notebook 05 are complete;
-  the final holdout has not been opened locally and awaits one Colab run.
+- `DEC-018` froze the retained final method, development-only 80 and 95 percent
+  interval calibration, one-time holdout access, and latest-origin output
+  contract before final evaluation.
+- `DEC-019` accepts final run `20260923T152725Z_8c9ab4d8_e93091`. Point WAPE is
+  9.04 percent at H1 and 10.46-10.66 percent at H2-H4 with 100 percent
+  prediction coverage. Both interval levels over-cover and fail their upper
+  calibration guardrails, so they are reported as conservative ranges without
+  post-holdout retuning.
 - No claim of incremental model performance or business impact is made.
 
 ## Problem statement
@@ -68,6 +72,8 @@ scope. The planned local, Git, Drive, and SQL boundaries are described in
 [the architecture](docs/architecture.md), with major choices recorded in
 [the decision log](docs/decisions.md). The main analytical notebooks will run
 in Google Colab using the documented [Colab workflow](docs/colab_workflow.md).
+Reviewed final evidence and claim limits are in
+[the final results](docs/final_results.md).
 
 ## Dataset
 
@@ -178,13 +184,12 @@ silently.
 ## Next gate
 
 Data validation, holdout-safe EDA, baseline backtesting, candidate selection,
-and final-procedure implementation are complete. Neither locked candidate
-qualified for confirmation, so the transparent horizon-specific baseline is
-retained. The next gate is one clean Colab execution of Notebook 05 after the
-operator deliberately changes `OPEN_FINAL_HOLDOUT` to `True`. The resulting
-holdout and latest-origin evidence must then be reviewed without retuning the
-procedure. See the [final baseline procedure](docs/final_baseline_procedure.md)
-and [decision log](docs/decisions.md) for the exact boundary.
+final holdout evaluation, and latest-origin forecasting are complete. Neither
+locked candidate qualified for confirmation, so the transparent horizon-
+specific baseline is retained. The next gate is publication-quality case-study
+packaging using the frozen evidence in the [final results](docs/final_results.md),
+not another modeling iteration. Any new method requires a new experiment and
+an untouched future evaluation period.
 
 ## License and attribution
 

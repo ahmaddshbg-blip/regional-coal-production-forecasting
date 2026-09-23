@@ -1,7 +1,7 @@
 # Google Colab Workflow
 
-Status: notebooks 01 through 04 reproduced successfully in clean Colab;
-final baseline procedure frozen and Notebook 05 ready for one-time execution
+Status: notebooks 01 through 05 reproduced successfully in Colab; final
+holdout reviewed and model evaluation closed
 
 ## Roles of Colab and Python files
 
@@ -213,6 +213,15 @@ Notebook 05 reports H1-H4 point and interval performance and creates unscored
 forecasts from `2026Q2` through `2027Q2`. H1-H2 rankings are review priorities,
 not direct predictions of fleet, workforce, service demand, revenue, or causal
 effects.
+
+The accepted final run is `20260923T152725Z_8c9ab4d8_e93091` at revision
+`8c9ab4d8aefc45d45ce63b3b2cbb528b54038054`. The reviewed executed notebook
+ran all 54 tests without error and displayed `access_mode = reuse`, confirming
+that the passed run and its hashed artifacts were validated rather than
+rescored. Point WAPE is 9.04 percent at H1 and approximately 10.5 percent at
+H2-H4. Both nominal interval levels over-cover beyond their upper guardrails;
+this limitation is final and must not trigger recalibration. See
+[`final_results.md`](final_results.md).
 
 ## Raw snapshot policy
 
