@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "Regional Coal Production Forecasting"
+type: software
+authors:
+  - family-names: "Sihombing"
+    given-names: "Ahmad Fani"
+version: 1.0.0
+date-released: "2026-09-23"
+license: MIT
+repository-code: "https://github.com/ahmaddshbg-blip/regional-coal-production-forecasting"
+abstract: >-
+  A reproducible data-science portfolio project for quarterly U.S. state coal-
+  production forecasting using public MSHA data, chronological rolling-origin
+  evaluation, simple baselines, disciplined candidate rejection, uncertainty
+  auditing, and one-time final-holdout governance.
+keywords:
+  - data science
+  - forecasting
+  - time series
+  - coal production
+  - mining
+  - MSHA
+  - DuckDB
+  - SQL
+  - Python

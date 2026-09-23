@@ -44,6 +44,13 @@ monotonic deterioration, but their positive aggregate bias is larger. Missing
 actual targets explain the decline in target availability; every eligible cell
 still received a forecast.
 
+![Final holdout WAPE by forecast origin](../reports/figures/02_holdout_origin_stability.png)
+
+Origin-level WAPE is not constant. Several H2-H4 origins exceed 20 percent even
+though the horizon averages remain close to 10 percent, so users should monitor
+individual forecast vintages rather than treating the aggregate metric as a
+guarantee for every quarter.
+
 The point results are similar to or better than the development evidence and
 support retaining the simple rule. This is an absolute performance statement,
 not evidence that a rejected Ridge candidate would have failed on holdout,

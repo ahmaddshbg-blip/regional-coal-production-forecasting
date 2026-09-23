@@ -4,6 +4,7 @@
 .gitattributes text eol=lf
 .gitignore text eol=lf
 *.csv text eol=lf
+*.cff text eol=lf
 *.ipynb text eol=lf
 *.json text eol=lf
 *.md text eol=lf

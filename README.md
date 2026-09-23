@@ -1,198 +1,142 @@
 # Regional Coal Production Forecasting
 
-This project studies quarterly coal-production forecasting across U.S. mining
-regions using public data from the Mine Safety and Health Administration
-(MSHA). The intended analytical use is regional capacity planning and market
-prioritization for a mining contractor, equipment supplier, or industrial
-services provider.
+[![tests](https://github.com/ahmaddshbg-blip/regional-coal-production-forecasting/actions/workflows/tests.yml/badge.svg)](https://github.com/ahmaddshbg-blip/regional-coal-production-forecasting/actions/workflows/tests.yml)
 
-## Project status
+A reproducible forecasting portfolio project using public U.S. Mine Safety and
+Health Administration (MSHA) data to estimate quarterly coal production by
+state one to four quarters ahead. The intended use is prioritizing regional
+capacity review for mining contractors, equipment suppliers, or industrial
+service providers, not making a company-specific operating decision.
 
-The project has completed problem definition, data feasibility, chronological
-evaluation design, engineering design, and the validated data pipeline. Gate 4
-passed locally and in a clean Google Colab runtime against the frozen snapshot.
+## Decision output
 
-- The business problem and decision context are approved.
-- Gate 1 data feasibility is complete for the frozen 2026-09-20 snapshot.
-- Gate 2 is complete and the forecasting contract is frozen as version 1.0.
-- Development validation, an evaluation embargo, and the final untouched
-  holdout are fixed before model development.
-- Gate 3 selected DuckDB, Parquet checkpoints, a minimal Python package,
-  machine-readable configuration, run manifests, and a risk-based test plan.
-- Gate 4 reproduced all frozen source and transformation counts, built 183,301
-  mine-quarter rows and 2,718 state-quarter rows, passed ten synthetic tests,
-  and produced identical Parquet hashes on Windows and Colab.
-- The exact Colab runtime dependency closure is frozen in
-  `requirements-lock.txt`.
-- Gate 5 holdout-safe time-series EDA passed in a clean Colab runtime. The
-  reviewed evidence supports retaining the validated panel without imputation,
-  outlier removal, winsorization, or a preselected target transformation.
-- Gate 5 baseline backtesting passed in a clean Colab runtime at code revision
-  `62a3b84d8d7a7617ac8fc3798b053adb9ac97e7d`. The versioned run reproduced
-  every frozen Gate 2 scored-cell, WAPE, and median-state MASE audit value with
-  100 percent prediction coverage and without opening the holdout.
-- `DEC-012` and `DEC-013` froze the first candidate and its model-specific
-  diagnostic return path before implementation. The log-change Ridge passed
-  engineering checks but failed selection with mean WAPE skill of `-52.71%`.
-- `DEC-015` authorized one diagnosis-driven raw-delta Ridge successor. It
-  passed 100 percent prediction coverage and interval calibration, but mean
-  WAPE skill was only `0.63%`, below the frozen `5%` materiality threshold;
-  its paired bootstrap interval also crossed zero.
-- `DEC-016` rejected v2, stopped candidate-family iteration, and retained the
-  frozen horizon-specific baseline. Candidate confirmation remained unopened;
-  final holdout access occurred later only under `DEC-018` and `DEC-019`.
-- Notebook 04 reproduced both decisions in a clean Colab runtime at revision
-  `7a441b6d77b12d0dfca02908d95b4931d001d57a`; both runs matched local results,
-  used the accepted data and baseline lineage, and kept later blocks closed.
-- `DEC-018` froze the retained final method, development-only 80 and 95 percent
-  interval calibration, one-time holdout access, and latest-origin output
-  contract before final evaluation.
-- `DEC-019` accepts final run `20260923T152725Z_8c9ab4d8_e93091`. Point WAPE is
-  9.04 percent at H1 and 10.46-10.66 percent at H2-H4 with 100 percent
-  prediction coverage. Both interval levels over-cover and fail their upper
-  calibration guardrails, so they are reported as conservative ranges without
-  post-holdout retuning.
-- No claim of incremental model performance or business impact is made.
+![Final holdout WAPE and interval coverage by forecast horizon](reports/figures/01_final_holdout_performance.png)
 
-## Problem statement
+The final method is intentionally simple: persistence at H1, H2, and H4, and
+annual seasonal naive at H3. Two regularized-regression candidates were tested
+under the same chronological design and rejected before holdout because they
+did not establish material, robust improvement.
 
-Quarterly coal production varies substantially across mining regions. A
-planning team needs a defensible view of expected production one to four
-quarters ahead so that it can prioritize contractor capacity review, market
-attention, workforce planning, and heavy-equipment service readiness without
-treating the latest observed quarter as a reliable forecast.
+Final holdout results across 12 rolling origins:
 
-The proposed target is total operator-reported coal production, in tons, for
-each U.S. state and calendar quarter. The main output will be a multi-horizon
-forecast with uncertainty information and errors evaluated chronologically.
+| Horizon | WAPE | Median state MASE | Aggregate signed bias | Prediction coverage |
+| ---: | ---: | ---: | ---: | ---: |
+| H1 | 9.04% | 0.335 | 1.04% | 100% |
+| H2 | 10.66% | 0.467 | 2.21% | 100% |
+| H3 | 10.50% | 0.458 | 4.18% | 100% |
+| H4 | 10.46% | 0.419 | 4.17% | 100% |
 
-See [the project brief](docs/project_brief.md) and
-[the forecasting contract](docs/forecasting_contract.md) for the current
-scope. The planned local, Git, Drive, and SQL boundaries are described in
-[the architecture](docs/architecture.md), with major choices recorded in
-[the decision log](docs/decisions.md). The main analytical notebooks will run
-in Google Colab using the documented [Colab workflow](docs/colab_workflow.md).
-Reviewed final evidence and claim limits are in
-[the final results](docs/final_results.md).
+The interval result is deliberately not presented as a success. Development-
+calibrated 80 and 95 percent intervals achieved 94.16 and 98.97 percent pooled
+holdout coverage, exceeding their predeclared upper guardrails and indicating
+excessive width. They are conservative review ranges, not sharply calibrated
+nominal intervals, and were not retuned after holdout.
 
-## Dataset
+See the [reviewed final results](docs/final_results.md) for error analysis,
+uncertainty evidence, regional interpretation, and exact claim boundaries.
 
-The approved source is the official
+## Latest planning view
+
+![H1-H2 production forecasts and conservative 80 percent ranges for leading states](reports/figures/03_latest_state_forecast_priorities.png)
+
+The latest forecast origin is `2026Q2`, with targets from `2026Q3` through
+`2027Q2`. The first five H1-H2 review priorities by forecast production are
+Wyoming, West Virginia, Pennsylvania, Illinois, and North Dakota.
+
+H1 and H2 repeat the latest observed production because their frozen rule is
+persistence. This ranking identifies production scale and uncertainty for
+follow-up. It does not predict growth, equipment demand, staffing, service
+revenue, financial impact, or causal effects. The source quarter may be revised
+by MSHA.
+
+## Why this project matters
+
+The project demonstrates more than fitting a forecasting library:
+
+- 2.76 million raw records are validated and reduced with DuckDB and versioned
+  SQL to 183,301 mine-quarter and 2,718 state-quarter rows;
+- dynamic state eligibility avoids selecting entities using future survival;
+- 54 development origins, a four-origin embargo, and a 12-origin final holdout
+  preserve chronological validity across H1-H4;
+- target lags, labels, scaling, candidate selection, and interval calibration
+  are protected by deterministic tests;
+- failed Ridge candidates are documented instead of hidden or repeatedly
+  replaced until one wins; and
+- a durable marker and hashed manifests prevent silent final-holdout rescoring.
+
+The result supports the portfolio claim that a simple method can be the correct
+final choice when added complexity does not earn its maintenance and validity
+cost.
+
+## Data and provenance
+
+The source is the official
 [MSHA Open Government Data portal](https://arlweb.msha.gov/OpenGovernmentData/OGIMSHA.asp).
-The local snapshot contains quarterly operator-reported employment and coal
-production from 2000Q1 through 2026Q2, joined by `MINE_ID` to the MSHA mine
-master.
+The frozen 2026-09-20 snapshot contains quarterly production records from
+`2000Q1` through `2026Q2` and a mine master joined by `MINE_ID`.
 
-Raw data are kept outside version control. Source URLs, expected filenames,
-snapshot hashes, and the initial audit are documented in
-[the dataset decision record](docs/data_decision.md) and
-[the raw-data manifest](data/raw/README.md). Missing-value treatment and
-latest-quarter evidence are documented in
-[the data-quality policy](docs/data_quality_policy.md). Source generation,
-revision, and availability semantics are documented in
-[data provenance](docs/data_provenance.md). Derived checkpoint fields and
-missingness semantics are defined in the [data dictionary](docs/data_dictionary.md).
+Raw archives and generated checkpoints are excluded from Git because of their
+size. Expected filenames, sizes, SHA-256 hashes, source counts, parsing rules,
+and acquisition date are recorded in `configs/project.json` and the
+[data decision record](docs/data_decision.md). Source limitations, revision
+behavior, and null/zero semantics are documented in
+[data provenance](docs/data_provenance.md), the
+[data-quality policy](docs/data_quality_policy.md), and the
+[data dictionary](docs/data_dictionary.md).
 
-The 2.76 million raw rows include coal and metal/nonmetal records. The first
-domain filter reduces the relevant coal input to 344,473 rows without removing
-historical quarters. Forecasting will use a state-quarter table containing no
-more than 27 states by 106 observed quarters. Notebooks will consume validated
-checkpoints instead of repeatedly loading the complete raw files.
+## Reproduce
 
-This reduction does not change the forecasting objective. The raw snapshot is
-preserved in full, the transformation scans all relevant coal history, and the
-mine-quarter checkpoint remains available for regional composition and data
-quality diagnostics.
-
-Gate 3 selected DuckDB for the versioned SQL transformation and Parquet for
-rebuildable mine-quarter and state-quarter checkpoints. pandas is used only
-after the relational reduction reaches an appropriate analytical scale.
-
-## Reproduce Gate 4
-
-Place the two manually downloaded files under `data/raw/`, install the project,
-run the tests, and build the checkpoints:
-
-```text
-python -m pip install -e .
-python -m unittest discover -s tests -v
-python scripts/build_dataset.py
-```
-
-The frozen Colab environment can be reproduced with:
+The public test path does not require raw data:
 
 ```text
 python -m pip install -r requirements-lock.txt
+python -m pip install scikit-learn==1.9.1
 python -m pip install -e . --no-deps
+python -m unittest discover -s tests -v
 ```
 
-The command validates filenames, byte sizes, headers, row structure, SHA-256
-hashes, source counts, keys, numeric fields, mine-master coverage, and
-missing-value totals before writing either checkpoint. Existing checkpoints
-are not overwritten unless `--overwrite` is supplied deliberately. For the
-primary notebook workflow, open
-[`01_data_validation_and_panel.ipynb`](notebooks/01_data_validation_and_panel.ipynb)
-in Colab and set its single private Drive root.
-
-Development-only baseline evaluation can also be run from the command line:
+For a full data rebuild, manually obtain `MinesProdQuarterly.zip` and
+`Mines.zip` from MSHA, extract `MinesProdQuarterly.txt` and `Mines.txt` under
+`data/raw/`, verify that their hashes match the frozen configuration, then run:
 
 ```text
+python scripts/build_dataset.py
 python scripts/evaluate_baselines.py
-```
-
-The command validates checkpoint lineage, evaluates only the frozen 54
-development origins, verifies the pre-implementation audit table, and writes
-versioned forecast and metric artifacts under the configured runs root.
-
-The selection-only candidate evaluator can be reproduced with either frozen
-configuration:
-
-```text
 python scripts/evaluate_candidate_selection.py --candidate-config configs/candidate.json
 python scripts/evaluate_candidate_selection.py --candidate-config configs/candidate_v2.json
 ```
 
-Both commands stop with `diagnostic_gate_status = awaiting_review` and write
-versioned point, diagnostic, interval, and bootstrap artifacts. They do not
-open confirmation or holdout data.
+Notebook 05's one-time final holdout should not be reopened merely to reproduce
+a published number. The reviewed run is recorded by ID, code revision,
+configuration hashes, artifact hashes, and the executed-notebook hash in the
+[final results](docs/final_results.md). See the
+[reproducibility guide](docs/reproducibility.md) for the public, private-Drive,
+and revised-source boundaries.
 
-The final procedure can be reused from the command line after its decision
-record is reviewed. The first execution requires the explicit irreversible
-flag; later calls validate and reuse the passed artifacts:
+## Repository guide
 
-```text
-python scripts/evaluate_final_baseline.py --open-holdout
-```
+- `notebooks/`: five clean Colab analytical interfaces;
+- `src/coal_forecasting/`: tested data, EDA, forecasting, diagnostics, and
+  holdout logic;
+- `sql/`: versioned mine-quarter and state-quarter transformations;
+- `configs/`: frozen source, evaluation, candidate, and final-method contracts;
+- `tests/`: synthetic checks for parsing, temporal boundaries, leakage,
+  metrics, candidate behavior, intervals, and one-time holdout access;
+- `docs/`: provenance, methodology, decisions, final results, and workflow;
+- `reports/figures/`: reviewed lightweight visual evidence; and
+- `scripts/`: command-line entry points for each reproducible stage.
 
-The primary interface is
-[`05_final_holdout_and_latest_forecast.ipynb`](notebooks/05_final_holdout_and_latest_forecast.ipynb),
-where `OPEN_FINAL_HOLDOUT` defaults to `False` so the first access cannot happen
-silently.
+## Limits
 
-## Analytical boundaries
-
-- This is a public-data demonstration of a realistic mining-planning problem.
-- It does not represent an internal system or operating recommendation for a
-  specific company.
-- State is an aggregation level, not a claim that spatial modeling is the
-  project's central contribution.
-- Current mine status, owner, and operator fields are point-in-time attributes
-  and will not be used as if they were historically available.
-- Causal effects, mine scheduling, equipment dispatch, and financial impact
-  estimation are outside the approved scope.
-
-## Next gate
-
-Data validation, holdout-safe EDA, baseline backtesting, candidate selection,
-final holdout evaluation, and latest-origin forecasting are complete. Neither
-locked candidate qualified for confirmation, so the transparent horizon-
-specific baseline is retained. The next gate is publication-quality case-study
-packaging using the frozen evidence in the [final results](docs/final_results.md),
-not another modeling iteration. Any new method requires a new experiment and
-an untouched future evaluation period.
+This is a latest-vintage chronological evaluation, not a true historical-
+vintage simulation, because MSHA does not provide every prior publication
+vintage. State is a regional aggregation, not a spatial model. Current mine
+status and ownership fields are not treated as historically available. The
+project does not estimate mine schedules, fleet needs, labor requirements,
+maintenance demand, costs, prices, revenue, or causal effects.
 
 ## License and attribution
 
 Project code and documentation are released under the [MIT License](LICENSE).
 MSHA and U.S. Department of Labor data attribution and reuse boundaries are
-documented separately in [DATA_ATTRIBUTION.md](DATA_ATTRIBUTION.md).
+documented in [DATA_ATTRIBUTION.md](DATA_ATTRIBUTION.md).
