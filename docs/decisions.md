@@ -383,3 +383,64 @@ candidate has been selected. The next work product is a documented candidate
 design that responds to trend or regime change and cross-state heterogeneity
 without using unavailable future information. Promotion thresholds and the
 untouched holdout policy remain unchanged.
+
+## DEC-012: Freeze one pooled direct Ridge candidate procedure
+
+Date: 2026-09-23
+
+Status: Accepted before candidate implementation
+
+Decision:
+
+Freeze `pooled_direct_ridge_log_change_v1` as the only candidate procedure for
+the current development experiment. Fit four direct global Ridge regressions,
+one per horizon, to predict the `log1p` production change from the persistence
+forecast. Use only the current and preceding three observed state targets,
+recent log changes, recent zero count, calendar time, target quarter, and state
+identifier. Pool historical states, regularize state indicators, refit at every
+origin, and prohibit recursive candidate inputs.
+
+Freeze the alpha grid at `0.1`, `1.0`, `10.0`, and `100.0`. Select one shared
+alpha using development origins `2007Q4` through `2016Q3`; use `2016Q4` through
+`2021Q1` only as an unrevised confirmation diagnostic. Use origin-safe pooled
+conformal residual intervals normalized by the state seasonal MASE scale, with
+the first eight development origins as calibration warm-up. Use 2,000 paired
+four-quarter moving-block bootstrap replications with seed `20260920` for skill
+uncertainty. The complete executable specification is recorded in
+[`candidate_procedure.md`](candidate_procedure.md).
+
+Evidence:
+
+- Persistence's positive `forecast - actual` bias grows with horizon, so a
+  baseline-relative trend correction tests a failure visible before candidate
+  modeling.
+- EDA finds weak common aggregate seasonality, long-run decline, a major 2020
+  disruption, and substantial cross-state scale and error heterogeneity.
+- The four most recent targets are guaranteed for every eligible forecast
+  cell. Longer fixed lags are not guaranteed and would threaten the required
+  100 percent prediction coverage.
+- A global regularized model borrows information across the 24 to 26 eligible
+  states while state indicators and state-specific lag values preserve regional
+  differences. It remains simpler and more auditable than local order search or
+  nonlinear tree boosting.
+- Employment, hours, mine counts, and current mine-master fields do not yet
+  have an approved prediction-time role. Excluding them keeps the first
+  candidate's information set defensible.
+
+Alternatives:
+
+Local damped-trend or ETS models were not selected because they do not pool
+information and create state-level fit and interval failure modes for short or
+interrupted histories. Per-state ARIMA order search would multiply low-sample
+choices. Global tree boosting is deferred because its nonlinear flexibility
+and larger tuning surface are not yet justified. No alternate family is
+authorized automatically if Ridge fails.
+
+Consequence:
+
+Candidate design is now frozen, but no model has been implemented or scored.
+The next gate may add the model dependency, tested feature and candidate
+modules, development-only evaluation artifacts, and notebook 04. Any change to
+the transformation, features, pooling, window, alpha policy, interval method,
+or bootstrap after candidate results requires a new dated decision. The final
+holdout remains unopened, and all promotion thresholds remain unchanged.

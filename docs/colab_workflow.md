@@ -1,7 +1,7 @@
 # Google Colab Workflow
 
 Status: notebooks 01, 02, and 03 reproduced successfully in clean Colab;
-candidate-procedure design is next
+candidate procedure frozen, notebook 04 not yet implemented
 
 ## Roles of Colab and Python files
 
@@ -161,6 +161,20 @@ passed, all 11,144 forecast rows were written, prediction coverage was 100
 percent, and the manifest records `holdout_opened = false`. These results close
 the baseline-reproduction gate only. Notebook 04 must not be created until the
 candidate procedure and its information-availability rules are frozen.
+
+## Notebook 04 boundary
+
+`DEC-012` now freezes `pooled_direct_ridge_log_change_v1`; the full procedure is
+documented in [`candidate_procedure.md`](candidate_procedure.md). Notebook 04
+may be created only as a readable interface to the tested implementation of
+that procedure. It may not search additional feature sets, transformations,
+training windows, model families, interval methods, or holdout outcomes.
+
+The notebook must run the complete tests, validate data and baseline lineage,
+evaluate only the 54 development origins, display the selection and untouched
+confirmation blocks separately, and write a versioned manifest with
+`holdout_opened = false`. A passing development result triggers a separate
+review; it does not authorize holdout execution automatically.
 
 ## Raw snapshot policy
 

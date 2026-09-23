@@ -1,8 +1,8 @@
 # Project Brief
 
-Status: Approved; Gate 2 evaluation contract frozen
+Status: Approved; Gate 5 complete and candidate procedure frozen
 
-Last reviewed: 2026-09-21
+Last reviewed: 2026-09-23
 
 ## Context
 

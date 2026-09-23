@@ -31,7 +31,11 @@ passed locally and in a clean Google Colab runtime against the frozen snapshot.
   `62a3b84d8d7a7617ac8fc3798b053adb9ac97e7d`. The versioned run reproduced
   every frozen Gate 2 scored-cell, WAPE, and median-state MASE audit value with
   100 percent prediction coverage and without opening the holdout.
-- No candidate forecasting model has been selected or evaluated.
+- `DEC-012` freezes one development-only candidate procedure: four direct
+  pooled Ridge models that learn a regularized `log1p` trend correction to
+  persistence. Its features, tuning boundary, uncertainty method, and failure
+  behavior are fixed before implementation.
+- No candidate forecasting model has been implemented or evaluated.
 - No performance or business-impact claim is made yet.
 
 ## Problem statement
@@ -136,12 +140,13 @@ versioned forecast and metric artifacts under the configured runs root.
 
 ## Next gate
 
-Data validation, holdout-safe EDA, and development baseline backtesting are
-complete. The next gate must freeze one complete candidate procedure,
-including its information set, feature availability, training rule, tuning
-boundary, and uncertainty method, before candidate code or notebook 04 is
-created. Model choice and holdout evaluation remain deferred until that design
-is justified and recorded.
+Data validation, holdout-safe EDA, development baseline backtesting, and the
+candidate-procedure design are complete. The next gate may implement the
+frozen procedure in tested reusable modules and a clean notebook 04, then
+evaluate it on development origins only. The holdout remains closed until one
+locked procedure passes every frozen promotion rule and a separate review
+authorizes final evaluation. See the
+[candidate procedure](docs/candidate_procedure.md) for the exact boundary.
 
 ## License and attribution
 

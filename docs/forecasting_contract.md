@@ -283,6 +283,13 @@ or if holdout skill is non-positive overall, retain the appropriate baseline
 and state clearly that added predictive value was not established. That is a
 valid project result, not a reason to search models until one wins.
 
+`DEC-012` freezes the development candidate as
+`pooled_direct_ridge_log_change_v1`. Its feature, fitting, tuning, interval,
+bootstrap, and failure rules are specified in
+[`candidate_procedure.md`](candidate_procedure.md). This candidate decision
+does not alter the target, split, baselines, metrics, promotion criteria, or
+holdout policy in this contract.
+
 ## Uncertainty evaluation
 
 The final retained method must provide uncertainty intervals or document why a

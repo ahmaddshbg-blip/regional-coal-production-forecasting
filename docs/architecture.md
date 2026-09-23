@@ -1,9 +1,8 @@
 # Architecture
 
-Status: Gate 5 development baseline backtesting reproduced and accepted in
-clean Colab; candidate-procedure design is next
+Status: Gate 5 complete; candidate procedure frozen before implementation
 
-Last reviewed: 2026-09-21
+Last reviewed: 2026-09-23
 
 ## Design goals
 
@@ -283,7 +282,9 @@ The initial runtime set is deliberately small:
 - NumPy 2.x for numerical metric logic; and
 - Matplotlib 3.8 or newer but below 4 for reproducible figures.
 
-No model library is included before a candidate class is justified. The
+No model library was included before a candidate class was justified.
+`DEC-012` now selects deterministic Ridge regression for the first candidate;
+its implementation may add scikit-learn as one recorded dependency. The
 standard library supplies JSON, hashing, logging, argument parsing, and unit
 testing.
 
