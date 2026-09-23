@@ -102,7 +102,11 @@ def moving_block_origin_samples(
     seed: int,
 ) -> np.ndarray:
     """Sample non-circular contiguous origin blocks with replacement."""
-    ordered = np.array(sorted(pd.to_datetime(list(origins)).unique()))
+    ordered = np.sort(
+        pd.DatetimeIndex(pd.to_datetime(list(origins)))
+        .unique()
+        .to_numpy(dtype="datetime64[ns]")
+    )
     if block_length < 1 or block_length > len(ordered):
         raise ValueError("Block length must be between one and the origin count")
     if replications < 1:

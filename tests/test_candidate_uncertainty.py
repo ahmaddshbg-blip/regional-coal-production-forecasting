@@ -60,6 +60,7 @@ class CandidateUncertaintyTests(unittest.TestCase):
 
         np.testing.assert_array_equal(first, second)
         self.assertEqual(first.shape, (3, 8))
+        self.assertEqual(first.dtype, np.dtype("datetime64[ns]"))
         self.assertTrue(np.isin(first, origins.to_numpy()).all())
 
     def test_interval_metrics_include_coverage_width_and_winkler_score(self) -> None:
