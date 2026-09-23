@@ -35,6 +35,10 @@ passed locally and in a clean Google Colab runtime against the frozen snapshot.
   pooled Ridge models that learn a regularized `log1p` trend correction to
   persistence. Its features, tuning boundary, uncertainty method, and failure
   behavior are fixed before implementation.
+- `DEC-013` freezes model-specific diagnostics and an iteration boundary: hard
+  leakage or coverage failures stop the run, while residual and assumption
+  warnings are interpreted according to their effect on point forecasts,
+  pooling, or uncertainty before confirmation results are opened.
 - No candidate forecasting model has been implemented or evaluated.
 - No performance or business-impact claim is made yet.
 
@@ -143,8 +147,9 @@ versioned forecast and metric artifacts under the configured runs root.
 Data validation, holdout-safe EDA, development baseline backtesting, and the
 candidate-procedure design are complete. The next gate may implement the
 frozen procedure in tested reusable modules and a clean notebook 04, then
-evaluate it on development origins only. The holdout remains closed until one
-locked procedure passes every frozen promotion rule and a separate review
+evaluate its selection diagnostics before opening confirmation results. The
+holdout remains closed until one locked procedure passes every frozen
+promotion rule and a separate review
 authorizes final evaluation. See the
 [candidate procedure](docs/candidate_procedure.md) for the exact boundary.
 

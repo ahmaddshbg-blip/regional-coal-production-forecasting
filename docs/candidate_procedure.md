@@ -4,6 +4,8 @@ Status: Frozen before implementation on 2026-09-23
 
 Decision record: `DEC-012`
 
+Diagnostic governance: `DEC-013`
+
 Procedure identifier: `pooled_direct_ridge_log_change_v1`
 
 ## Purpose
@@ -144,6 +146,117 @@ selection, and any imputed target.
 No alternate transformation, feature subset, interaction search, training
 window, loss, or solver may be selected after candidate results are seen.
 
+## Assumptions and diagnostic gate
+
+This candidate is a forecasting procedure, not a classical coefficient-
+inference exercise. Its validity therefore does not depend on importing every
+ordinary least-squares or ARIMA diagnostic as a universal rejection rule.
+Assumptions are classified by the consequence of a violation.
+
+### Hard validity requirements
+
+The run must stop and the implementation must be corrected when any of the
+following occurs:
+
+- a feature or training label crosses its outer forecast origin;
+- scaling or encoding uses rows outside the outer training boundary;
+- a development entry point receives a target after `2022Q1`;
+- an eligible forecast row lacks a required four-quarter feature;
+- prediction coverage is below 100 percent or a point forecast is non-finite;
+- reported zero is changed to missing or an absent target is imputed;
+- repeated runs with the same inputs and configuration are not deterministic;
+  or
+- candidate generation uses a prior candidate prediction recursively.
+
+These are data and evaluation validity failures. They cannot be accepted as
+mere model limitations.
+
+### Model-working assumptions
+
+The Ridge candidate makes the following approximations:
+
+1. Future `log1p` change is approximately additive and linear in the frozen
+   numeric and categorical feature representation.
+2. Dynamic coefficients can be shared across states after including
+   regularized state indicators and each state's own recent values.
+3. Relationships estimated from the expanding history remain sufficiently
+   transportable to later origins.
+4. `log1p` is an adequate scale for fitting even though selection and final
+   evaluation occur in raw tons.
+5. L2 shrinkage trades coefficient bias for lower forecast variance; individual
+   coefficients are not unbiased structural effects.
+
+Stationarity of the target level is not a prerequisite for this direct model,
+and no unit-root test is used as an automatic model gate. Predictor
+multicollinearity is expected and controlled by Ridge; it limits isolated
+coefficient interpretation but does not make the forecast undefined.
+Residual normality, constant variance, and serial independence are not required
+for coefficient p-values because no coefficient hypothesis tests or causal
+claims will be reported. Their violations still matter for forecast error
+patterns and uncertainty calibration and must be diagnosed.
+
+### Selection-block diagnostics
+
+Diagnostics are computed using candidate predictions from the 36-origin
+selection block only, after the alpha rule is applied and before candidate
+results from the 18-origin confirmation block are opened.
+
+Required outputs by horizon are:
+
+- signed bias and absolute error by origin, state, and actual-volume band;
+- residual and absolute-residual summaries by fitted-value decile;
+- mean residual by decile of `log_level_t`, each recent log change,
+  `recent_zero_count`, and `origin_index`;
+- within-state residual autocorrelation at origin lags one and four when at
+  least 12 paired residuals exist, with the number of eligible states shown;
+- residual scale before and after division by the origin-time seasonal MASE
+  scale;
+- standardized coefficient paths across origins and horizons;
+- numeric-feature correlation and condition diagnostics, interpreted in the
+  presence of L2 regularization;
+- zero-floor frequency and raw-scale bias after inverse transformation; and
+- state-seen-in-training and training-row exclusion counts.
+
+Quarterly rolling-origin errors overlap for horizons above one, so residual
+autocorrelation is evidence about remaining temporal structure and interval
+dependence, not an automatic proof that point forecasts are invalid.
+Heteroskedasticity is handled similarly: it motivates scale diagnostics and
+may invalidate pooled intervals even when point forecasts remain useful.
+
+### Uncertainty assumptions
+
+The conformal procedure assumes that horizon-specific residual scores are
+sufficiently stable over time after state-scale normalization. Serial
+dependence and regime change mean exact finite-sample exchangeability is not
+claimed. Empirical prequential coverage, width, Winkler score, normalized-score
+drift, and coverage by state and origin are therefore mandatory.
+
+Failure of the frozen 80 or 95 percent coverage guardrail is an interval-
+procedure failure. It does not retroactively invalidate point forecasts, but
+the candidate cannot enter the holdout as the retained complete procedure with
+uncalibrated intervals.
+
+### Iteration boundary
+
+The process is iterative without allowing result-driven model chasing:
+
+1. implementation validity tests run first;
+2. alpha is selected on the selection block;
+3. the diagnostics above are reviewed before confirmation metrics are opened;
+4. a hard failure is fixed without changing the statistical procedure;
+5. a material specification problem may lead to either an explicitly accepted
+   limitation or a new procedure identifier and dated decision; and
+6. only an accepted, newly frozen specification may open confirmation results.
+
+Once candidate confirmation metrics have been inspected, the confirmation
+block is no longer available for tuning. A confirmation failure is reported as
+a failure of the current experiment. Holdout results can never be used to
+revise the model, features, thresholds, or interval procedure.
+
+This gate implements model-specific diagnosis without pretending that every
+warning has the same consequence. The diagnostic review and its decision must
+be written to the run manifest and decision log.
+
 ## Hyperparameter selection
 
 The only tuned parameter is the Ridge penalty. Its frozen grid is:
@@ -167,7 +280,8 @@ comparators. If scores differ by no more than `0.0001` absolute skill, choose
 the larger alpha to prefer stronger regularization.
 
 After selection, the alpha is fixed. The confirmation block is evaluated
-without retuning, feature changes, or model-family substitution. Formal
+only after the selection-block diagnostic gate is accepted, and without
+retuning, feature changes, or model-family substitution. Formal
 candidate promotion metrics are also reported over all 54 development origins
 as required by the forecasting contract. The confirmation split is a
 stability diagnostic and does not replace or weaken the frozen promotion
@@ -273,6 +387,10 @@ Before notebook 04 may run, tests must verify:
 - paired bootstrap resamples origins rather than individual state cells; and
 - all development entry points reject holdout target values and origins.
 
+Diagnostic tests must additionally verify fitted-value binning, within-state
+lag pairing, minimum-pair guards, zero-floor counts, coefficient-path schema,
+and that no confirmation prediction enters the selection diagnostic frame.
+
 ## Reproducibility record
 
 The implementation must add the justified model dependency to
@@ -287,5 +405,6 @@ least the following in its manifest:
 - candidate and interval calibration origin ranges;
 - dependency versions and random seed;
 - point, interval, and bootstrap artifact hashes;
+- selection diagnostic artifact hashes and diagnostic-gate status;
 - prediction and interval coverage checks; and
 - `holdout_opened = false`.

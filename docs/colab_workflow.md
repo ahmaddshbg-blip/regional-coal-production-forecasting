@@ -172,7 +172,8 @@ training windows, model families, interval methods, or holdout outcomes.
 
 The notebook must run the complete tests, validate data and baseline lineage,
 evaluate only the 54 development origins, display the selection and untouched
-confirmation blocks separately, and write a versioned manifest with
+confirmation blocks separately, display the `DEC-013` selection diagnostic
+gate before confirmation results, and write a versioned manifest with
 `holdout_opened = false`. A passing development result triggers a separate
 review; it does not authorize holdout execution automatically.
 

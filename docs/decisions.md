@@ -444,3 +444,49 @@ modules, development-only evaluation artifacts, and notebook 04. Any change to
 the transformation, features, pooling, window, alpha policy, interval method,
 or bootstrap after candidate results requires a new dated decision. The final
 holdout remains unopened, and all promotion thresholds remain unchanged.
+
+## DEC-013: Freeze model-specific diagnostics and the iteration boundary
+
+Date: 2026-09-23
+
+Status: Accepted before candidate implementation
+
+Decision:
+
+Add a formal diagnostic gate to `pooled_direct_ridge_log_change_v1`. Separate
+hard temporal and data-validity requirements from model-working assumptions
+and uncertainty assumptions. Run model diagnostics on the 36-origin selection
+block after alpha selection but before opening candidate results from the
+18-origin confirmation block.
+
+Hard failures include leakage, preprocessing outside the training boundary,
+post-development targets, missing required features, incomplete or non-finite
+predictions, target imputation, nondeterminism, and recursive candidate inputs.
+They must be fixed before evaluation continues.
+
+The selection diagnostic report must examine transformed functional form,
+raw-scale bias, residual dependence at origin lags one and four,
+heteroskedasticity and scale normalization, state pooling, coefficient
+stability, zero-floor frequency, and feature conditioning. Residual normality,
+constant variance, stationarity of target levels, and serial independence are
+not universal point-forecast rejection rules for this regularized direct
+model. They are interpreted according to their effect on forecast adequacy,
+coefficient claims, or interval calibration.
+
+Reason:
+
+The project already follows a systematic problem, data, EDA, baseline, and
+candidate-design sequence, but `DEC-012` did not state an explicit diagnostic
+return path. Model-specific assumptions must be examined without either
+forcing classical inference assumptions onto a predictive model or ignoring
+residual evidence that can invalidate uncertainty claims.
+
+Consequence:
+
+A hard implementation failure returns to the relevant engineering stage. A
+material specification problem found on the selection block may be accepted as
+a documented limitation or may create a new procedure identifier and dated
+decision before confirmation is opened. After confirmation results are seen,
+they cannot be used for retuning; failure is reported. Holdout results can
+never revise the procedure. The full diagnostic specification is part of
+[`candidate_procedure.md`](candidate_procedure.md).
