@@ -41,6 +41,9 @@ passed locally and in a clean Google Colab runtime against the frozen snapshot.
 - `DEC-016` rejects v2, stops candidate-family iteration, and retains the
   frozen horizon-specific baseline. Candidate confirmation and the final
   holdout remain unopened.
+- Notebook 04 reproduced both decisions in a clean Colab runtime at revision
+  `7a441b6d77b12d0dfca02908d95b4931d001d57a`; both runs matched local results,
+  used the accepted data and baseline lineage, and kept later blocks closed.
 - No claim of incremental model performance or business impact is made.
 
 ## Problem statement
@@ -158,14 +161,14 @@ open confirmation or holdout data.
 ## Next gate
 
 Data validation, holdout-safe EDA, baseline backtesting, candidate
-implementation, and selection diagnostics are complete. Neither locked
-candidate qualified for confirmation. The next gate is publication-oriented:
-create a readable notebook 04 that reproduces the failed selection experiments
-without opening later blocks, then decide whether the project closes with the
-retained baseline or begins a separately governed future experiment. See the
-[v1 procedure](docs/candidate_procedure.md),
-[v2 procedure](docs/candidate_procedure_v2.md), and
-[decision log](docs/decisions.md) for the exact boundary.
+implementation, and clean Colab selection reproduction are complete. Neither
+locked candidate qualified for confirmation, and the horizon-specific baseline
+is retained. The next gate must freeze that baseline's final point forecast,
+development-only uncertainty calibration, one-time holdout report, and latest-
+origin outputs before any final holdout value is read. See the [v1
+procedure](docs/candidate_procedure.md), [v2
+procedure](docs/candidate_procedure_v2.md), and [decision
+log](docs/decisions.md) for the exact boundary.
 
 ## License and attribution
 

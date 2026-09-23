@@ -628,3 +628,43 @@ confirmation and the final comparative holdout remain unopened because no
 candidate qualified to enter them. A future new experiment would require a
 newly dated research question, procedure, and evaluation policy rather than a
 continuation of this search.
+
+## DEC-017: Accept Colab candidate reproduction and retain the baseline
+
+Date: 2026-09-23
+
+Status: Accepted after clean Colab reproduction of notebook 04
+
+Decision:
+
+Accept the clean Colab reproduction of both selection-only candidate
+experiments at code revision `7a441b6d77b12d0dfca02908d95b4931d001d57a`.
+Retain the frozen horizon-specific baseline as the forecasting method to carry
+forward. Close candidate selection without opening confirmation or holdout and
+without authorizing another candidate family.
+
+Evidence:
+
+- The notebook completed all cells without an error and the test subprocess
+  returned zero.
+- The v1 run was `20260923T131252Z_7a441b6d_22fd1d`; the v2 run was
+  `20260923T131621Z_7a441b6d_528dfc`.
+- Both manifests use validated data run
+  `20260921T130122Z_770aedae_bbefbe` and accepted baseline run
+  `20260921T144811Z_62a3b84d_41560a`.
+- Both manifests record a clean Git worktree, `confirmation_opened = false`,
+  and `holdout_opened = false`.
+- Selected alphas, point metrics, bootstrap intervals, residual diagnostics,
+  interval coverage, and promotion decisions reproduce the local results.
+- Six NumPy warnings came from correlations with constant residual sequences;
+  the affected correlations were already undefined and did not change model
+  metrics. A later guarded implementation removes those warnings.
+
+Consequence:
+
+The candidate-selection stage is complete. Before any final holdout values are
+read, the project must freeze a simple final-baseline procedure, its
+development-only uncertainty calibration, the one-time holdout report, and the
+latest-origin forecast outputs. The final method will emphasize H1 and H2 for
+near-term operating decisions while preserving H1 through H4 to avoid changing
+the evaluation horizon after observing results.

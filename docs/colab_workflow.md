@@ -183,6 +183,14 @@ The exact candidate dependency lock must be refreshed from a clean Colab
 runtime after this notebook succeeds. The existing lock remains the accepted
 data-pipeline environment and must not be relabelled as candidate evidence.
 
+The accepted Colab execution used revision
+`7a441b6d77b12d0dfca02908d95b4931d001d57a`. V1 run
+`20260923T131252Z_7a441b6d_22fd1d` and v2 run
+`20260923T131621Z_7a441b6d_528dfc` reproduced the local results with a clean
+worktree and retained `confirmation_opened = false` and
+`holdout_opened = false`. This closes candidate selection only. It does not
+authorize final holdout access.
+
 ## Raw snapshot policy
 
 The complete raw snapshot remains available even though the analytical pipeline

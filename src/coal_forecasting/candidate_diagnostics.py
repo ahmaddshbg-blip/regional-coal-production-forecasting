@@ -59,6 +59,8 @@ def residual_autocorrelation(
             correlation = (
                 pairs["error"].corr(pairs["lagged_error"])
                 if count >= minimum_pairs
+                and pairs["error"].nunique(dropna=True) > 1
+                and pairs["lagged_error"].nunique(dropna=True) > 1
                 else np.nan
             )
             records.append(

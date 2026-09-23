@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+import warnings
 
 import pandas as pd
 
@@ -49,6 +50,29 @@ class CandidateDiagnosticTests(unittest.TestCase):
         self.assertEqual(set(result["state_code"]), {"AA", "BB"})
         self.assertEqual(set(result["lag"]), {1, 4})
         self.assertTrue(result["correlation"].eq(1.0).all())
+
+    def test_constant_residual_pairs_are_undefined_without_warning(self) -> None:
+        origins = pd.period_range("2010Q1", periods=8, freq="Q").to_timestamp()
+        forecasts = pd.DataFrame(
+            {
+                "origin_date": origins,
+                "state_code": ["AA"] * 8,
+                "horizon": [1] * 8,
+                "forecast": [11.0] * 8,
+                "actual": [10.0] * 8,
+                "scored": [True] * 8,
+            }
+        )
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", RuntimeWarning)
+            result = residual_autocorrelation(
+                forecasts,
+                lags=(1,),
+                minimum_pairs=4,
+            )
+
+        self.assertTrue(pd.isna(result.loc[0, "correlation"]))
 
 
 if __name__ == "__main__":
