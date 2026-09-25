@@ -20,10 +20,10 @@ from coal_forecasting.baselines import generate_baseline_forecasts
 from coal_forecasting.candidate import (
     ALPHA_GRID,
     PROCEDURE_ID,
-    V2_ALPHA_GRID,
-    V2_PROCEDURE_ID,
+    RAW_DELTA_ALPHA_GRID,
+    RAW_DELTA_PROCEDURE_ID,
+    fit_predict_raw_delta_ridge,
     fit_predict_ridge,
-    fit_predict_v2_ridge,
     select_shared_alpha,
 )
 from coal_forecasting.candidate_diagnostics import (
@@ -34,11 +34,11 @@ from coal_forecasting.candidate_diagnostics import (
 from coal_forecasting.candidate_features import (
     CATEGORICAL_FEATURES,
     NUMERIC_FEATURES,
-    V2_NUMERIC_FEATURES,
+    RAW_DELTA_NUMERIC_FEATURES,
     build_prediction_features,
+    build_raw_delta_prediction_features,
+    build_raw_delta_training_examples,
     build_training_examples,
-    build_v2_prediction_features,
-    build_v2_training_examples,
 )
 from coal_forecasting.candidate_uncertainty import (
     add_prequential_intervals,
@@ -120,9 +120,9 @@ def load_candidate_config(path: str | Path) -> dict[str, Any]:
     if config["procedure_id"] == PROCEDURE_ID:
         numeric_features = NUMERIC_FEATURES
         alpha_grid = ALPHA_GRID
-    elif config["procedure_id"] == V2_PROCEDURE_ID:
-        numeric_features = V2_NUMERIC_FEATURES
-        alpha_grid = V2_ALPHA_GRID
+    elif config["procedure_id"] == RAW_DELTA_PROCEDURE_ID:
+        numeric_features = RAW_DELTA_NUMERIC_FEATURES
+        alpha_grid = RAW_DELTA_ALPHA_GRID
     else:
         raise ValueError("Candidate config procedure identifier is not frozen")
     expected_features = {
@@ -130,7 +130,7 @@ def load_candidate_config(path: str | Path) -> dict[str, Any]:
         "categorical": list(CATEGORICAL_FEATURES),
     }
     if config["features"] != expected_features:
-        raise ValueError("Candidate feature contract does not match frozen v1")
+        raise ValueError("Candidate feature contract does not match its procedure")
     if tuple(float(value) for value in config["alpha_grid"]) != alpha_grid:
         raise ValueError("Candidate alpha grid does not match its frozen procedure")
     config["_config_path"] = str(config_path)
@@ -177,11 +177,11 @@ def _candidate_forecasts_for_alpha(
         prediction_builder = build_prediction_features
         fit_predict = fit_predict_ridge
         numeric_features = NUMERIC_FEATURES
-    elif procedure_id == V2_PROCEDURE_ID:
-        training_builder = build_v2_training_examples
-        prediction_builder = build_v2_prediction_features
-        fit_predict = fit_predict_v2_ridge
-        numeric_features = V2_NUMERIC_FEATURES
+    elif procedure_id == RAW_DELTA_PROCEDURE_ID:
+        training_builder = build_raw_delta_training_examples
+        prediction_builder = build_raw_delta_prediction_features
+        fit_predict = fit_predict_raw_delta_ridge
+        numeric_features = RAW_DELTA_NUMERIC_FEATURES
     else:
         raise ValueError(f"Unsupported candidate procedure: {procedure_id}")
 
@@ -362,7 +362,9 @@ def evaluate_candidate_selection(
     evaluation = project_config["evaluation"]
     procedure_id = candidate_config["procedure_id"]
     numeric_features = (
-        NUMERIC_FEATURES if procedure_id == PROCEDURE_ID else V2_NUMERIC_FEATURES
+        NUMERIC_FEATURES
+        if procedure_id == PROCEDURE_ID
+        else RAW_DELTA_NUMERIC_FEATURES
     )
     origins = selection_origin_labels(candidate_config)
     target_end = add_quarters(
@@ -546,7 +548,7 @@ def _load_latest_baseline_manifest(
 
 def run_candidate_selection_evaluation(
     project_config_path: str | Path = "configs/project.json",
-    candidate_config_path: str | Path = "configs/candidate.json",
+    candidate_config_path: str | Path = "configs/ridge_log_change.json",
     *,
     root: str | Path | None = None,
 ) -> dict[str, Any]:

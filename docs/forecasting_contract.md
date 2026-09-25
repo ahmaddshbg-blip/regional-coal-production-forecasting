@@ -287,8 +287,8 @@ valid project result, not a reason to search models until one wins.
 diagnostic gate before confirmation. `DEC-015` then froze one mechanism-based
 successor, `pooled_direct_ridge_raw_delta_v2`; it also failed the unchanged
 promotion criteria. Their specifications and outcomes are recorded in
-[`candidate_procedure.md`](candidate_procedure.md) and
-[`candidate_procedure_v2.md`](candidate_procedure_v2.md). `DEC-016` stops
+[`ridge_log_change_procedure.md`](ridge_log_change_procedure.md) and
+[`ridge_raw_delta_procedure.md`](ridge_raw_delta_procedure.md). `DEC-016` stops
 candidate-family iteration and retains the horizon-specific baseline without
 opening candidate confirmation or holdout results. None of these decisions
 changes the target, split, metrics, promotion criteria, or holdout policy in

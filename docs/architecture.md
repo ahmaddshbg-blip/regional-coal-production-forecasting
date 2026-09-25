@@ -16,7 +16,7 @@ Last reviewed: 2026-09-23
 - support Google Colab notebook execution while keeping local development,
   validation, and tests efficient.
 
-## Gate 3 technology decisions
+## Technology choices
 
 - Embedded SQL engine: DuckDB Python client.
 - Raw ingestion: DuckDB `read_csv` with an explicit schema, pipe delimiter,

@@ -11,7 +11,9 @@ def main() -> None:
         description="Run the frozen selection-only Ridge candidate evaluation."
     )
     parser.add_argument("--project-config", default="configs/project.json")
-    parser.add_argument("--candidate-config", default="configs/candidate.json")
+    parser.add_argument(
+        "--candidate-config", default="configs/ridge_log_change.json"
+    )
     parser.add_argument("--root", type=Path, default=None)
     arguments = parser.parse_args()
 

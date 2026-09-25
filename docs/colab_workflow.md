@@ -29,7 +29,7 @@ Python modules and scripts own:
 - reusable visualization functions; and
 - artifact metadata and run manifests.
 
-## Planned notebook sequence
+## Notebook sequence
 
 Notebook files are created only when their analytical stage begins. The frozen
 sequence is:
@@ -101,7 +101,7 @@ It resolves only the installed runtime dependency closure of DuckDB,
 Matplotlib, NumPy, and pandas; it deliberately excludes unrelated packages
 preinstalled by Colab.
 
-## Notebook 01 execution
+## Notebook 01: Data validation and panel construction
 
 Open `notebooks/01_data_validation_and_panel.ipynb` in Colab and run it from a
 fresh runtime. Edit only `DRIVE_PROJECT_ROOT` if the recommended Drive layout
@@ -121,7 +121,7 @@ configuration hash, matching passed manifest, output sizes, and output hashes
 are validated. Set the flag to `True` only for an intentional rebuild after
 confirming that the snapshot and configuration have not changed.
 
-## Notebook 02 execution
+## Notebook 02: Time-series exploration
 
 Open `notebooks/02_time_series_eda.ipynb` in a fresh Colab runtime after
 notebook 01 has produced a passed run manifest and both checkpoints. The
@@ -136,7 +136,7 @@ mine-level contributors to flagged changes, and dynamic eligibility. It does
 not impute or remove observations, select transformations, implement a
 baseline, choose a model, or calculate holdout performance.
 
-## Notebook 03 execution
+## Notebook 03: Baseline backtesting
 
 Open `notebooks/03_baseline_backtesting.ipynb` in a fresh Colab runtime after
 the reviewed notebook 02 run. The notebook validates the passed data manifest,
@@ -162,7 +162,7 @@ percent, and the manifest records `holdout_opened = false`. These results close
 the baseline-reproduction gate only. Notebook 04 must not be created until the
 candidate procedure and its information-availability rules are frozen.
 
-## Notebook 04 boundary
+## Notebook 04: Candidate selection and diagnostics
 
 `DEC-014` and `DEC-016` reject both frozen candidate procedures on the
 36-origin selection block. Confirmation and holdout were never opened.
@@ -176,22 +176,22 @@ call the reusable selection-only evaluator, display alpha selection, point
 metrics, residual diagnostics, interval calibration, paired bootstrap results,
 and the frozen rejection criteria. Every generated manifest must retain
 `diagnostic_gate_status = awaiting_review`, `confirmation_opened = false`, and
-`holdout_opened = false`. The v1 and v2 review decisions live in the decision
-log rather than being inferred automatically by notebook code.
+`holdout_opened = false`. The log-change and raw-delta review decisions live in
+the decision log rather than being inferred automatically by notebook code.
 
 The exact candidate dependency lock must be refreshed from a clean Colab
 runtime after this notebook succeeds. The existing lock remains the accepted
 data-pipeline environment and must not be relabelled as candidate evidence.
 
 The accepted Colab execution used revision
-`7a441b6d77b12d0dfca02908d95b4931d001d57a`. V1 run
-`20260923T131252Z_7a441b6d_22fd1d` and v2 run
+`7a441b6d77b12d0dfca02908d95b4931d001d57a`. The log-change run
+`20260923T131252Z_7a441b6d_22fd1d` and raw-delta run
 `20260923T131621Z_7a441b6d_528dfc` reproduced the local results with a clean
 worktree and retained `confirmation_opened = false` and
 `holdout_opened = false`. This closes candidate selection only. It does not
 authorize final holdout access.
 
-## Notebook 05 boundary
+## Notebook 05: Final holdout and latest forecast
 
 `DEC-018` freezes `horizon_specific_naive_baseline_v1`: persistence at H1, H2,
 and H4, and annual seasonal naive at H3. Its 80 and 95 percent intervals use

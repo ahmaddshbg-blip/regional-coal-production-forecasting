@@ -73,7 +73,7 @@ became available. Publication occurs after quarter end, and source files may be
 replaced as MSHA updates them. Historical revisions are therefore possible and
 the local snapshot hash matters.
 
-## Target construction candidate
+## Target definition
 
 For each state and calendar quarter:
 
@@ -127,7 +127,7 @@ a stable mine-to-state panel structure, documented replacement-based updates,
 and a target that directly supports the approved regional forecasting
 objective.
 
-## Gate result
+## Decision status
 
 Gate 1 passed on 2026-09-20. Source reuse terms, latest-quarter completeness,
 revision behavior, and missing-value treatment are documented in the focused

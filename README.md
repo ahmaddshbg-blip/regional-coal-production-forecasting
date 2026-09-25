@@ -8,7 +8,7 @@ to four quarters ahead. The intended use is prioritizing regional capacity
 review for mining contractors, equipment suppliers, or industrial service
 providers, not making a company-specific operating decision.
 
-## Decision output
+## Results
 
 ![Final holdout WAPE and interval coverage by forecast horizon](reports/figures/01_final_holdout_performance.png)
 
@@ -35,7 +35,7 @@ nominal intervals, and were not retuned after holdout.
 See the [reviewed final results](docs/final_results.md) for error analysis,
 uncertainty evidence, regional interpretation, and exact claim boundaries.
 
-## Latest planning view
+## Latest forecast
 
 ![H1-H2 production forecasts and conservative 80 percent ranges for leading states](reports/figures/03_latest_state_forecast_priorities.png)
 
@@ -49,7 +49,7 @@ follow-up. It does not predict growth, equipment demand, staffing, service
 revenue, financial impact, or causal effects. The source quarter may be revised
 by MSHA.
 
-## Why this project matters
+## Methodology
 
 The project demonstrates more than fitting a forecasting library:
 
@@ -83,7 +83,7 @@ behavior, and null/zero semantics are documented in
 [data-quality policy](docs/data_quality_policy.md), and the
 [data dictionary](docs/data_dictionary.md).
 
-## Reproduce
+## Reproducibility
 
 The public test path does not require raw data:
 
@@ -101,8 +101,8 @@ For a full data rebuild, manually obtain `MinesProdQuarterly.zip` and
 ```text
 python scripts/build_dataset.py
 python scripts/evaluate_baselines.py
-python scripts/evaluate_candidate_selection.py --candidate-config configs/candidate.json
-python scripts/evaluate_candidate_selection.py --candidate-config configs/candidate_v2.json
+python scripts/evaluate_candidate_selection.py --candidate-config configs/ridge_log_change.json
+python scripts/evaluate_candidate_selection.py --candidate-config configs/ridge_raw_delta.json
 ```
 
 Notebook 05's one-time final holdout should not be reopened merely to reproduce
@@ -112,7 +112,7 @@ configuration hashes, artifact hashes, and the executed-notebook hash in the
 [reproducibility guide](docs/reproducibility.md) for the public, private-Drive,
 and revised-source boundaries.
 
-## Repository guide
+## Project structure
 
 - `notebooks/`: five clean Colab analytical interfaces;
 - `src/coal_forecasting/`: tested data, EDA, forecasting, diagnostics, and
@@ -125,7 +125,7 @@ and revised-source boundaries.
 - `reports/figures/`: reviewed lightweight visual evidence; and
 - `scripts/`: command-line entry points for each reproducible stage.
 
-## Limits
+## Limitations
 
 This is a latest-vintage chronological evaluation, not a true historical-
 vintage simulation, because MSHA does not provide every prior publication

@@ -406,7 +406,7 @@ conformal residual intervals normalized by the state seasonal MASE scale, with
 the first eight development origins as calibration warm-up. Use 2,000 paired
 four-quarter moving-block bootstrap replications with seed `20260920` for skill
 uncertainty. The complete executable specification is recorded in
-[`candidate_procedure.md`](candidate_procedure.md).
+[`ridge_log_change_procedure.md`](ridge_log_change_procedure.md).
 
 Evidence:
 
@@ -488,7 +488,7 @@ a documented limitation or may create a new procedure identifier and dated
 decision before confirmation is opened. After confirmation results are seen,
 they cannot be used for retuning; failure is reported. Holdout results can
 never revise the procedure. The full diagnostic specification is part of
-[`candidate_procedure.md`](candidate_procedure.md).
+[`ridge_log_change_procedure.md`](ridge_log_change_procedure.md).
 
 ## DEC-014: Reject the log-change Ridge candidate before confirmation
 
@@ -515,7 +515,7 @@ Evidence:
 - Candidate WAPE was 8.93, 13.99, 17.19, and 20.12 percent for H1 through H4,
   versus comparator WAPE of 7.85, 10.27, 10.32, and 10.35 percent.
 - Aggregate signed bias was `-3.10`, `-9.53`, `-12.72`, and `-15.44` percent.
-  Under the frozen `forecast - actual` convention, v1 increasingly
+  Under the frozen `forecast - actual` convention, the log-change candidate increasingly
   underforecast production.
 - Underforecasting concentrated in the highest fitted-value and level deciles.
   Median within-state lag-one residual correlation was `0.459`, `0.640`, and
@@ -535,17 +535,17 @@ long-horizon dependence left in residuals.
 
 Consequence:
 
-V1 is a completed failed experiment. Its artifacts remain reproducible, but it
-cannot enter confirmation. One successor may be specified from this diagnosed
-mechanism; it must be frozen under a new identifier before implementation and
-must stop permanently at the selection gate if it does not improve on the
-frozen comparator.
+The log-change Ridge candidate is a completed failed experiment. Its artifacts
+remain reproducible, but it cannot enter confirmation. One successor may be
+specified from this diagnosed mechanism; it must be frozen under a new
+identifier before implementation and must stop permanently at the selection
+gate if it does not improve on the frozen comparator.
 
 ## DEC-015: Freeze a raw-delta persistence-anchored Ridge successor
 
 Date: 2026-09-23
 
-Status: Accepted before v2 implementation
+Status: Accepted before raw-delta implementation
 
 Decision:
 
@@ -560,7 +560,7 @@ Use the fixed alpha grid `1`, `100`, `10000`, and `1000000`, selecting one
 shared alpha on the same 36-origin selection block with the existing WAPE-skill
 and tie rule. Keep the same prequential interval and paired moving-block
 bootstrap procedures. The complete specification is recorded in
-[`candidate_procedure_v2.md`](candidate_procedure_v2.md).
+[`ridge_raw_delta_procedure.md`](ridge_raw_delta_procedure.md).
 
 Reason:
 
@@ -572,13 +572,14 @@ global drift when all learned corrections should shrink away.
 
 Consequence:
 
-V2 must be implemented test-first and evaluated only on the selection block.
-Its raw-scale linearity, volume concentration, coefficient stability, residual
-dependence, and interval calibration require the same explicit review. If v2
-fails the selection gate, retain the frozen baseline and stop candidate-family
-iteration; do not create v3. Confirmation and holdout remain closed.
+The raw-delta candidate must be implemented test-first and evaluated only on
+the selection block. Its raw-scale linearity, volume concentration,
+coefficient stability, residual dependence, and interval calibration require
+the same explicit review. If the raw-delta candidate fails the selection gate,
+retain the frozen baseline and stop candidate-family iteration; do not create a
+third candidate. Confirmation and holdout remain closed.
 
-## DEC-016: Reject v2 and stop candidate-family iteration
+## DEC-016: Reject the raw-delta Ridge candidate and stop iteration
 
 Date: 2026-09-23
 
@@ -589,7 +590,8 @@ Decision:
 Reject `pooled_direct_ridge_raw_delta_v2` using selection run
 `20260923T065208Z_3831181d_e59ae8`. Retain the frozen horizon-specific baseline
 and stop candidate-family iteration. Do not open candidate confirmation or
-holdout results, and do not create a v3 to search for a favorable result.
+holdout results, and do not create a third candidate to search for a favorable
+result.
 
 Evidence:
 
@@ -613,8 +615,9 @@ Evidence:
 
 Interpretation:
 
-The raw-delta response fixed v1's scale mismatch and returned performance close
-to persistence, as intended by its nested design. It did not establish useful
+The raw-delta response fixed the log-change candidate's scale mismatch and
+returned performance close to persistence, as intended by its nested design.
+It did not establish useful
 incremental forecasting value. The result supports the simple baseline rather
 than another model-family search on the same selection data.
 
@@ -646,8 +649,8 @@ Evidence:
 
 - The notebook completed all cells without an error and the test subprocess
   returned zero.
-- The v1 run was `20260923T131252Z_7a441b6d_22fd1d`; the v2 run was
-  `20260923T131621Z_7a441b6d_528dfc`.
+- The log-change run was `20260923T131252Z_7a441b6d_22fd1d`; the raw-delta
+  run was `20260923T131621Z_7a441b6d_528dfc`.
 - Both manifests use validated data run
   `20260921T130122Z_770aedae_bbefbe` and accepted baseline run
   `20260921T144811Z_62a3b84d_41560a`.

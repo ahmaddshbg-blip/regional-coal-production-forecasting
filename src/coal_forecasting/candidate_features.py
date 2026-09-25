@@ -19,7 +19,7 @@ NUMERIC_FEATURES = (
     "recent_zero_count",
     "origin_index",
 )
-V2_NUMERIC_FEATURES = (
+RAW_DELTA_NUMERIC_FEATURES = (
     "level_t",
     "raw_change_1",
     "raw_change_2",
@@ -190,7 +190,7 @@ def build_prediction_features(
     return featured.drop(columns=["feature_complete"]).reset_index(drop=True)
 
 
-def _add_v2_raw_features(frame: pd.DataFrame) -> pd.DataFrame:
+def _add_raw_delta_features(frame: pd.DataFrame) -> pd.DataFrame:
     result = frame.copy()
     result["level_t"] = result["target_lag_0"]
     result["raw_change_1"] = result["target_lag_0"] - result["target_lag_1"]
@@ -199,14 +199,14 @@ def _add_v2_raw_features(frame: pd.DataFrame) -> pd.DataFrame:
     return result
 
 
-def build_v2_training_examples(
+def build_raw_delta_training_examples(
     panel: pd.DataFrame,
     *,
     outer_origin: str | pd.Timestamp,
     horizon: int,
     modeling_start: str,
 ) -> pd.DataFrame:
-    """Build origin-safe raw-delta training rows for candidate v2."""
+    """Build origin-safe training rows for the raw-delta Ridge candidate."""
     prepared = prepare_state_panel(panel)
     outer_date = (
         period_start(outer_origin)
@@ -221,7 +221,7 @@ def build_v2_training_examples(
     ].rename(columns={"quarter_start_date": "pseudo_origin_date"})
     points["horizon"] = int(horizon)
 
-    featured = _add_v2_raw_features(
+    featured = _add_raw_delta_features(
         _feature_rows(
             prepared,
             points,
@@ -255,7 +255,7 @@ def build_v2_training_examples(
         "pseudo_origin_date",
         "target_date",
         "horizon",
-        *V2_NUMERIC_FEATURES,
+        *RAW_DELTA_NUMERIC_FEATURES,
         "target_quarter",
         "label",
         "response",
@@ -265,16 +265,16 @@ def build_v2_training_examples(
     ).reset_index(drop=True)
 
 
-def build_v2_prediction_features(
+def build_raw_delta_prediction_features(
     panel: pd.DataFrame,
     forecast_cells: pd.DataFrame,
     *,
     modeling_start: str,
 ) -> pd.DataFrame:
-    """Attach the frozen raw-level and raw-change feature set for v2."""
+    """Attach the frozen raw-level and raw-change feature set."""
     cells = forecast_cells.copy()
     cells["origin_date"] = pd.to_datetime(cells["origin_date"])
-    featured = _add_v2_raw_features(
+    featured = _add_raw_delta_features(
         _feature_rows(
             panel,
             cells,

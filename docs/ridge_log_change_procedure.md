@@ -1,4 +1,4 @@
-# Candidate Procedure
+# Log-Change Ridge Candidate Procedure
 
 Status: Rejected at the selection diagnostic gate on 2026-09-23
 
@@ -10,13 +10,14 @@ Procedure identifier: `pooled_direct_ridge_log_change_v1`
 
 Selection run: `20260923T062835Z_3831181d_38d675`
 
-This file remains the immutable specification of v1. The result-driven review
-is recorded in `DEC-014`; no confirmation origin was opened.
+This file remains the immutable specification of the log-change Ridge
+candidate. The result-driven review is recorded in `DEC-014`; no confirmation
+origin was opened.
 
 ## Purpose
 
-This document freezes the first and only candidate procedure authorized for
-the current development experiment. It fixes the hypothesis, information set,
+This document records the log-change Ridge procedure authorized for the
+development experiment. It fixes the hypothesis, information set,
 feature schema, fitting rule, hyperparameter selection, uncertainty procedure,
 and failure behavior before candidate code or notebook 04 exists.
 
@@ -41,8 +42,9 @@ numeric condition numbers remained below 2.9. The failure is therefore a
 model-scale and dynamic-specification problem, not an engineering-validity or
 conditioning failure.
 
-The confirmation block and holdout remain unopened. V1 cannot be promoted or
-patched. Any successor requires a new procedure identifier and dated decision.
+The confirmation block and holdout remain unopened. The log-change Ridge
+candidate cannot be promoted or patched. Any successor requires a new
+procedure identifier and dated decision.
 
 ## Candidate hypothesis
 

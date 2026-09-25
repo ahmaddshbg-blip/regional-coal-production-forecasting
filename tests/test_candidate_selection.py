@@ -45,7 +45,7 @@ def candidate_config() -> dict[str, object]:
     }
 
 
-def candidate_v2_config() -> dict[str, object]:
+def raw_delta_candidate_config() -> dict[str, object]:
     return {
         "procedure_id": "pooled_direct_ridge_raw_delta_v2",
         "alpha_grid": [1.0, 100.0, 10000.0, 1000000.0],
@@ -143,11 +143,11 @@ class CandidateSelectionTests(unittest.TestCase):
             pd.Timestamp("2022-01-01"),
         )
 
-    def test_v2_selection_uses_frozen_procedure_without_opening_confirmation(self) -> None:
+    def test_raw_delta_selection_keeps_confirmation_closed(self) -> None:
         result = evaluate_candidate_selection(
             panel_frame(),
             project_config(),
-            candidate_v2_config(),
+            raw_delta_candidate_config(),
         )
 
         self.assertIn(result["selected_alpha"], {1.0, 100.0, 10000.0, 1000000.0})

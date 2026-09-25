@@ -13,14 +13,14 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from coal_forecasting.candidate_features import (
     CATEGORICAL_FEATURES,
     NUMERIC_FEATURES,
-    V2_NUMERIC_FEATURES,
+    RAW_DELTA_NUMERIC_FEATURES,
 )
 
 
 PROCEDURE_ID = "pooled_direct_ridge_log_change_v1"
 ALPHA_GRID = (0.1, 1.0, 10.0, 100.0)
-V2_PROCEDURE_ID = "pooled_direct_ridge_raw_delta_v2"
-V2_ALPHA_GRID = (1.0, 100.0, 10000.0, 1000000.0)
+RAW_DELTA_PROCEDURE_ID = "pooled_direct_ridge_raw_delta_v2"
+RAW_DELTA_ALPHA_GRID = (1.0, 100.0, 10000.0, 1000000.0)
 
 
 @dataclass(frozen=True)
@@ -115,41 +115,41 @@ def fit_predict_ridge(
     )
 
 
-def fit_predict_v2_ridge(
+def fit_predict_raw_delta_ridge(
     training: pd.DataFrame,
     prediction: pd.DataFrame,
     *,
     alpha: float,
 ) -> CandidateFit:
-    """Fit the no-intercept raw-delta v2 model and forecast from persistence."""
+    """Fit the no-intercept raw-delta Ridge model from persistence."""
     required_training = {
-        *V2_NUMERIC_FEATURES,
+        *RAW_DELTA_NUMERIC_FEATURES,
         *CATEGORICAL_FEATURES,
         "response",
     }
-    required_prediction = {*V2_NUMERIC_FEATURES, *CATEGORICAL_FEATURES}
+    required_prediction = {*RAW_DELTA_NUMERIC_FEATURES, *CATEGORICAL_FEATURES}
     missing_training = required_training.difference(training.columns)
     missing_prediction = required_prediction.difference(prediction.columns)
     if missing_training:
         raise ValueError(
-            f"Candidate v2 training rows are missing: "
+            f"Raw-delta candidate training rows are missing: "
             f"{', '.join(sorted(missing_training))}"
         )
     if missing_prediction:
         raise ValueError(
-            "Candidate v2 prediction rows are missing: "
+            "Raw-delta candidate prediction rows are missing: "
             + ", ".join(sorted(missing_prediction))
         )
     if training.empty:
-        raise ValueError("Candidate v2 training rows are empty")
+        raise ValueError("Raw-delta candidate training rows are empty")
     if training[sorted(required_training)].isna().any().any():
-        raise ValueError("Candidate v2 training rows contain missing model values")
+        raise ValueError("Raw-delta candidate training rows contain missing model values")
     if prediction[sorted(required_prediction)].isna().any().any():
-        raise ValueError("Candidate v2 prediction rows contain missing model values")
+        raise ValueError("Raw-delta candidate prediction rows contain missing model values")
     if not np.isfinite(float(alpha)) or alpha <= 0:
         raise ValueError("Ridge alpha must be finite and positive")
 
-    transformer = _preprocessor(V2_NUMERIC_FEATURES)
+    transformer = _preprocessor(RAW_DELTA_NUMERIC_FEATURES)
     x_train = transformer.fit_transform(training)
     x_prediction = transformer.transform(prediction)
     estimator = Ridge(alpha=float(alpha), fit_intercept=False, solver="svd")
@@ -166,7 +166,7 @@ def fit_predict_v2_ridge(
         seen_states
     )
     if not np.isfinite(result["forecast"]).all():
-        raise ValueError("Candidate v2 produced a non-finite point forecast")
+        raise ValueError("Raw-delta candidate produced a non-finite point forecast")
 
     coefficients = pd.DataFrame(
         {

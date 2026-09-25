@@ -5,8 +5,8 @@ import unittest
 import pandas as pd
 
 from coal_forecasting.candidate_features import (
-    build_v2_prediction_features,
-    build_v2_training_examples,
+    build_raw_delta_prediction_features,
+    build_raw_delta_training_examples,
 )
 
 
@@ -25,8 +25,8 @@ def panel_frame() -> pd.DataFrame:
     )
 
 
-class CandidateV2FeatureTests(unittest.TestCase):
-    def test_v2_features_use_calendar_raw_changes(self) -> None:
+class RawDeltaFeatureTests(unittest.TestCase):
+    def test_features_use_calendar_raw_changes(self) -> None:
         cells = pd.DataFrame(
             {
                 "state_code": ["AA"],
@@ -34,7 +34,7 @@ class CandidateV2FeatureTests(unittest.TestCase):
                 "horizon": [2],
             }
         )
-        result = build_v2_prediction_features(
+        result = build_raw_delta_prediction_features(
             panel_frame(), cells, modeling_start="2019Q1"
         ).iloc[0]
 
@@ -44,8 +44,8 @@ class CandidateV2FeatureTests(unittest.TestCase):
         self.assertEqual(result["raw_change_3"], -15.0)
         self.assertEqual(result["recent_zero_count"], 1)
 
-    def test_v2_training_response_is_raw_delta_and_origin_safe(self) -> None:
-        result = build_v2_training_examples(
+    def test_training_response_is_raw_delta_and_origin_safe(self) -> None:
+        result = build_raw_delta_training_examples(
             panel_frame(),
             outer_origin="2021Q2",
             horizon=2,

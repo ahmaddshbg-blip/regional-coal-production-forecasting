@@ -61,8 +61,8 @@ Run:
 ```text
 python scripts/build_dataset.py
 python scripts/evaluate_baselines.py
-python scripts/evaluate_candidate_selection.py --candidate-config configs/candidate.json
-python scripts/evaluate_candidate_selection.py --candidate-config configs/candidate_v2.json
+python scripts/evaluate_candidate_selection.py --candidate-config configs/ridge_log_change.json
+python scripts/evaluate_candidate_selection.py --candidate-config configs/ridge_raw_delta.json
 ```
 
 The default local layout uses `data/` and `runs/`. Set `PROJECT_DATA_ROOT` and
