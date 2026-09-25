@@ -91,9 +91,8 @@ modules or scripts that the notebooks import.
 Reason:
 
 The notebook remains the primary interactive analytical narrative, while
-Python modules make important logic testable and reusable. This follows the
-effective separation used in Project 01 without requiring the complete project
-folder to be manually synchronized after every change.
+Python modules make important logic testable and reusable without requiring
+the complete project folder to be manually synchronized after every change.
 
 Consequence:
 
@@ -167,7 +166,7 @@ Polars, Spark, Docker, orchestration, or experiment-tracking infrastructure
 would duplicate capabilities or exceed the project's scale.
 
 The flat package is sufficient for a single forecasting workflow and avoids
-empty subpackages. JSON follows the established Project 01 pattern without an
+empty subpackages. JSON provides a compact configuration format without an
 extra parser dependency. Synthetic fixtures keep CI independent of the 301 MB
 raw snapshot, while local integration checks preserve confidence in the frozen
 data contract.
@@ -621,7 +620,7 @@ than another model-family search on the same selection data.
 
 Consequence:
 
-Project 02 may publish the two failed, leakage-safe candidate experiments as
+The project may publish the two failed, leakage-safe candidate experiments as
 evidence of disciplined model governance and retain persistence at H1, H2, and
 H4 and seasonal naive at H3 for the current planning forecast. Candidate
 confirmation and the final comparative holdout remain unopened because no
@@ -691,9 +690,9 @@ specification is recorded in
 
 Reason:
 
-The portfolio objective is to demonstrate defensible work with data,
-forecasting, documentation, and business interpretation rather than propose a
-novel or computationally heavy model. Both candidate experiments failed the
+The objective is to produce a defensible forecasting workflow with clear data,
+documentation, and business interpretation rather than propose a novel or
+computationally heavy model. Both candidate experiments failed the
 predeclared improvement criteria, while the simple baselines remained strong,
 transparent, inexpensive, and operationally interpretable.
 
@@ -745,14 +744,14 @@ Evidence:
 Reason:
 
 The point forecast provides transparent, reproducible baseline-level accuracy
-appropriate for a portfolio demonstration. The interval result does not meet
+for the stated regional planning use. The interval result does not meet
 its nominal calibration objective, but hiding that failure or tuning after the
 holdout would invalidate the project governance. Honest limitation reporting
 is more valuable than forcing a cosmetically successful uncertainty result.
 
 Consequence:
 
-Project 02 forecasting execution is complete. Final claims must use the point
+The forecasting workflow is complete. Final claims must use the point
 metrics and regional forecasts with the limits in
 [`final_results.md`](final_results.md). Intervals may be described only as
 conservative review ranges. Candidate confirmation stays closed, and no model,

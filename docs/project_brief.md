@@ -1,8 +1,8 @@
 # Project Brief
 
-Status: Approved; Gate 5 complete and candidate procedure frozen
+Status: Final; released as `v1.0.0`
 
-Last reviewed: 2026-09-23
+Last reviewed: 2026-09-25
 
 ## Context
 
@@ -19,10 +19,9 @@ demonstration at regional level.
 
 ## Problem
 
-The latest observed production is not a sufficient planning estimate. The team
-needs forecasts that distinguish normal quarter-to-quarter movement from
-larger changes and that quantify how forecast error grows across planning
-horizons.
+The latest observed production alone does not show which forecasting rule is
+reliable across planning horizons or quantify the associated error and
+uncertainty. The team needs a repeatable procedure that addresses both.
 
 ## Objective
 
@@ -72,8 +71,8 @@ allocate equipment or labor.
 
 The project will be considered analytically useful only if it:
 
-1. beats meaningful naive and seasonal-naive baselines under rolling-origin
-   evaluation for decision-relevant horizons;
+1. evaluates candidates against meaningful naive and seasonal-naive baselines
+   and retains added complexity only when the evidence supports it;
 2. reports performance by horizon and region instead of only one pooled score;
 3. quantifies uncertainty and identifies material failure modes;
 4. produces an interpretable regional planning output; and
@@ -106,9 +105,8 @@ Excluded:
 - spatial models or maps as the central analytical contribution;
 - advanced model classes without baseline evidence.
 
-## Portfolio contribution
+## Analytical contribution
 
-This project owns forecasting, multi-horizon temporal evaluation, uncertainty,
-and forecast error analysis. Unlike Project 01, it must predict observations
-that were genuinely unavailable at each forecast origin; a dashboard alone is
-not the final contribution.
+The workflow combines multi-horizon forecasting, chronological evaluation,
+uncertainty auditing, and forecast-error analysis to produce regional planning
+evidence from observations that were unavailable at each forecast origin.

@@ -2,11 +2,11 @@
 
 [![tests](https://github.com/ahmaddshbg-blip/regional-coal-production-forecasting/actions/workflows/tests.yml/badge.svg)](https://github.com/ahmaddshbg-blip/regional-coal-production-forecasting/actions/workflows/tests.yml)
 
-A reproducible forecasting portfolio project using public U.S. Mine Safety and
-Health Administration (MSHA) data to estimate quarterly coal production by
-state one to four quarters ahead. The intended use is prioritizing regional
-capacity review for mining contractors, equipment suppliers, or industrial
-service providers, not making a company-specific operating decision.
+A reproducible forecasting workflow using public U.S. Mine Safety and Health
+Administration (MSHA) data to estimate quarterly coal production by state one
+to four quarters ahead. The intended use is prioritizing regional capacity
+review for mining contractors, equipment suppliers, or industrial service
+providers, not making a company-specific operating decision.
 
 ## Decision output
 
@@ -64,9 +64,8 @@ The project demonstrates more than fitting a forecasting library:
   replaced until one wins; and
 - a durable marker and hashed manifests prevent silent final-holdout rescoring.
 
-The result supports the portfolio claim that a simple method can be the correct
-final choice when added complexity does not earn its maintenance and validity
-cost.
+The evidence supports a simple final method because added complexity did not
+earn its maintenance and validity cost under the frozen evaluation procedure.
 
 ## Data and provenance
 

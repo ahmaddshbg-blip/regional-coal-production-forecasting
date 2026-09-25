@@ -2,7 +2,7 @@
 
 ## Reproduction boundaries
 
-Project 02 has three distinct verification paths.
+This repository has three distinct verification paths.
 
 1. **Public code path:** install dependencies and run 54 synthetic tests. This
    verifies parsing contracts, transformations, temporal alignment, leakage

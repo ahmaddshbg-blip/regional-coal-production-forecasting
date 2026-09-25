@@ -120,14 +120,12 @@ the required computational reduction without discarding temporal history.
 | U.S. public data do not represent every mining market | Limit external-validity claims to transferable analytical practice, not direct operating equivalence. |
 | Government data and project code have different reuse boundaries | Attribute MSHA/DOL data separately; apply the MIT License only to original project code and documentation. |
 
-## Alternatives held in reserve
+## Selection rationale
 
-Other candidates considered included electric-vehicle adoption, company-level
-copper production, palm-oil production, and retail demand. They remain valid
-fallbacks, but switching now would add search cost without resolving a failure
-in the approved MSHA candidate. The mining dataset currently offers the clearest
-combination of source authority, temporal depth, panel structure, and portfolio
-distinctiveness.
+The MSHA sources provide authoritative provenance, sufficient temporal depth,
+a stable mine-to-state panel structure, documented replacement-based updates,
+and a target that directly supports the approved regional forecasting
+objective.
 
 ## Gate result
 

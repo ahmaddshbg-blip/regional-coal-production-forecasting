@@ -10,7 +10,7 @@ Leakage-safe quarterly coal-production forecasting with MSHA data, DuckDB/SQL,
 rolling-origin backtesting, baseline and Ridge governance, uncertainty audits,
 and reproducible Colab/Python workflows.
 
-## Portfolio card
+## Project summary
 
 **Regional Coal Production Forecasting**
 
@@ -25,8 +25,8 @@ reported honestly as conservative rather than retuned after holdout.
 
 ## LinkedIn post
 
-I completed a forecasting portfolio project using public U.S. Mine Safety and
-Health Administration coal-production data.
+I completed a forecasting project using public U.S. Mine Safety and Health
+Administration coal-production data.
 
 The work began with 2.76 million source rows and used DuckDB plus versioned SQL
 to build a validated state-quarter panel. I froze the forecast target,
@@ -110,7 +110,7 @@ honest uncertainty evaluation, not a claim that every component succeeded.
 
 ## Questions to defend
 
-**Why use U.S. data for an Indonesia-focused career portfolio?**
+**How transferable are results derived from U.S. data?**
 
 The source offers traceable public production history and realistic revision,
 missingness, panel, and forecasting constraints. The demonstrated capabilities
